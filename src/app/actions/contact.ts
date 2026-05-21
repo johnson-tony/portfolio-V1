@@ -26,8 +26,9 @@ export async function sendContactMessage(formData: FormData) {
     await resend.emails.send({
       from: "Portfolio <onboarding@resend.dev>",
       to: process.env.ADMIN_EMAIL || "tony@example.com",
+      replyTo: email, // This allows the admin to hit 'reply' in their mail app
       subject: `New Message from ${name}`,
-      text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${content}`,
+      text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${content}\n\n---\nReply directly to this email to contact ${name}.`,
     });
 
     // 3. Send Auto-reply to User
@@ -35,7 +36,7 @@ export async function sendContactMessage(formData: FormData) {
       from: "Portfolio <onboarding@resend.dev>",
       to: email,
       subject: "Thank you for contacting me!",
-      text: `Hi ${name},\n\nThank you for reaching out! I've received your message and will get back to you as soon as possible.\n\nBest regards,\nDeveloper Portfolio`,
+      text: `Hi ${name},\n\nThank you for reaching out! I've received your message and will get back to you as soon as possible.\n\nBest regards,\nJohnson Tony`,
     });
 
     return { success: true };

@@ -33,20 +33,26 @@ export default function Contact() {
   const onSubmit = async (data: ContactValues) => {
     setLoading(true);
     
-    const formData = new FormData();
-    formData.append("name", data.name);
-    formData.append("email", data.email);
-    formData.append("message", data.message);
-    
-    const res = await sendContactMessage(formData);
-    
-    setLoading(false);
-    if (res.success) {
-      setSubmitted(true);
-      toast.success("Message sent successfully! I'll get back to you soon.");
-      reset();
-    } else {
-      toast.error(res.error || "Failed to send message.");
+    try {
+      // 1. Send message via server action (saves to DB and sends emails)
+      const formData = new FormData();
+      formData.append("name", data.name);
+      formData.append("email", data.email);
+      formData.append("message", data.message);
+      
+      const result = await sendContactMessage(formData);
+
+      if (result.success) {
+        setLoading(false);
+        setSubmitted(true);
+        toast.success("Message sent successfully!");
+        reset();
+      } else {
+        throw new Error(result.error || "Failed to send message");
+      }
+    } catch (error: any) {
+      setLoading(false);
+      toast.error(error.message || "Something went wrong. Please try again later.");
     }
   };
 

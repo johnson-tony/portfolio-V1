@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Mail, Trash2, Loader2, CheckCircle, Clock } from "lucide-react";
+import { Mail, Trash2, Loader2, CheckCircle, Clock, Reply } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { getMessages, markAsRead, deleteMessage } from "@/app/actions/messages";
@@ -27,6 +27,13 @@ export default function MessagesManagement() {
       toast.success("Marked as read");
       loadMessages();
     }
+  };
+
+  const handleReply = (email: string, name: string) => {
+    const subject = `Re: Your message to Johnson Tony`;
+    const body = `Hi ${name},\n\nThank you for reaching out...`;
+    const mailtoUrl = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailtoUrl;
   };
 
   const handleDelete = async (id: string) => {
@@ -78,6 +85,14 @@ export default function MessagesManagement() {
               </div>
               
               <div className="flex md:flex-col gap-2 justify-end">
+                <Button 
+                  size="sm" 
+                  variant="outline" 
+                  onClick={() => handleReply(msg.email, msg.name)}
+                  className="glass border-white/10 hover:bg-white/10 text-xs font-bold gap-2"
+                >
+                  <Reply className="w-4 h-4" /> Reply
+                </Button>
                 {!msg.isRead && (
                   <Button 
                     size="sm" 
