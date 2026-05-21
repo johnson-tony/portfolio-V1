@@ -12,12 +12,15 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { getProfile, updateProfile } from "@/app/actions/profile";
 import { profileSchema } from "@/lib/validations";
+import { z } from "zod";
+
+type ProfileFormValues = z.infer<typeof profileSchema>;
 
 export default function ProfileManagement() {
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
   
-  const { register, handleSubmit, reset, setValue, watch, formState: { errors } } = useForm({
+  const { register, handleSubmit, reset, setValue, watch, formState: { errors } } = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
       name: "",
@@ -52,7 +55,7 @@ export default function ProfileManagement() {
     loadData();
   }, [reset]);
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: ProfileFormValues) => {
     setLoading(true);
     const res = await updateProfile(data);
     setLoading(false);
@@ -68,7 +71,7 @@ export default function ProfileManagement() {
   };
 
   const removeEducation = (index: number) => {
-    setValue("education", education.filter((_: any, i: number) => i !== index));
+    setValue("education", education.filter((_, i) => i !== index));
   };
 
   const ErrorMsg = ({ message }: { message?: string }) => (

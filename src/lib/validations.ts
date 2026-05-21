@@ -20,6 +20,11 @@ export const profileSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   title: z.string().min(2, "Title must be at least 2 characters"),
   about: z.string().min(20, "About section must be at least 20 characters"),
+  education: z.array(z.object({
+    institution: z.string().min(2, "Institution is required"),
+    degree: z.string().min(2, "Degree is required"),
+    year: z.string().min(2, "Year is required"),
+  })),
   skills: z.array(z.string()).min(1, "At least one skill is required"),
   socialLinks: z.object({
     github: z.string().url().optional().or(z.literal("")),
