@@ -4,6 +4,9 @@ import dbConnect from "@/lib/mongodb";
 import Settings from "@/models/Settings";
 import { revalidatePath } from "next/cache";
 
+import { checkAuth, ActionResponse } from "@/lib/safe-action";
+import { settingsSchema } from "@/lib/validations";
+
 export async function getSettings() {
   await dbConnect();
   try {
@@ -19,20 +22,26 @@ export async function getSettings() {
   }
 }
 
-export async function updateSettings(data: any) {
-  await dbConnect();
+export async function updateSettings(data: any): Promise<ActionResponse> {
   try {
+    await checkAuth();
+    await dbConnect();
+    
+    const validatedData = settingsSchema.parse(data);
+    
     const existing = await Settings.findOne({});
     if (existing) {
-      await Settings.findByIdAndUpdate(existing._id, data);
+      await Settings.findByIdAndUpdate(existing._id, validatedData);
     } else {
-      const newSettings = new Settings(data);
+      const newSettings = new Settings(validatedData);
       await newSettings.save();
     }
+    
     revalidatePath("/");
     revalidatePath("/admin/dashboard/settings");
     return { success: true };
   } catch (error: any) {
-    return { success: false, error: error.message };
+    console.error("Update Settings Error:", error);
+    return { success: false, error: error.message || "Failed to update settings" };
   }
 }

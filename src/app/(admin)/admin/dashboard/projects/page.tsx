@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { getProjects, addProject, updateProject, deleteProject } from "@/app/actions/projects";
+import FileUpload from "@/components/admin/FileUpload";
 
 export default function ProjectManagement() {
   const [projects, setProjects] = useState<any[]>([]);
@@ -17,6 +18,7 @@ export default function ProjectManagement() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<any | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
 
   useEffect(() => {
     loadProjects();
@@ -38,7 +40,7 @@ export default function ProjectManagement() {
       description: formData.get("description"),
       detailedDescription: formData.get("detailedDescription"),
       techStack: (formData.get("techStack") as string).split(",").map(s => s.trim()),
-      imageUrl: formData.get("imageUrl"),
+      imageUrl: imageUrl,
       githubUrl: formData.get("githubUrl"),
       liveDemoUrl: formData.get("liveDemoUrl"),
     };
@@ -73,6 +75,7 @@ export default function ProjectManagement() {
 
   const openModal = (project: any = null) => {
     setEditingProject(project);
+    setImageUrl(project?.imageUrl || "");
     setModalOpen(true);
   };
 
@@ -118,51 +121,62 @@ export default function ProjectManagement() {
       </div>
 
       <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-        <DialogContent className="max-w-3xl glass-dark border-white/10 text-white max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-bold">{editingProject ? "Edit Project" : "Add New Project"}</DialogTitle>
-          </DialogHeader>
-          <form onSubmit={handleSubmit} className="space-y-6 mt-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <Label>Project Title</Label>
-                <Input name="title" defaultValue={editingProject?.title} required className="glass border-white/10" />
+        <DialogContent className="max-w-3xl glass-dark border-white/10 text-white max-h-[90vh] overflow-y-auto p-0">
+          <div className="p-8 space-y-6">
+            <DialogHeader>
+              <DialogTitle className="text-2xl font-bold">{editingProject ? "Edit Project" : "Add New Project"}</DialogTitle>
+            </DialogHeader>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-6">
+                  <div className="space-y-2">
+                    <Label>Project Title</Label>
+                    <Input name="title" defaultValue={editingProject?.title || ""} required className="glass border-white/10 h-12" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Technologies (Comma separated)</Label>
+                    <Input name="techStack" defaultValue={editingProject?.techStack?.join(", ") || ""} required className="glass border-white/10 h-12" placeholder="Next.js, Tailwind..." />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Short Description</Label>
+                    <Input name="description" defaultValue={editingProject?.description || ""} required className="glass border-white/10 h-12" />
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <FileUpload 
+                    label="Project Image" 
+                    currentUrl={imageUrl} 
+                    onUploadComplete={(url) => setImageUrl(url)} 
+                  />
+                </div>
               </div>
+
               <div className="space-y-2">
-                <Label>Technologies (Comma separated)</Label>
-                <Input name="techStack" defaultValue={editingProject?.techStack?.join(", ")} required className="glass border-white/10" placeholder="Next.js, Tailwind..." />
+                <Label>Detailed Description</Label>
+                <Textarea name="detailedDescription" defaultValue={editingProject?.detailedDescription} required className="glass border-white/10 min-h-[120px] resize-none" />
               </div>
-            </div>
-            <div className="space-y-2">
-              <Label>Short Description</Label>
-              <Input name="description" defaultValue={editingProject?.description} required className="glass border-white/10" />
-            </div>
-            <div className="space-y-2">
-              <Label>Detailed Description</Label>
-              <Textarea name="detailedDescription" defaultValue={editingProject?.detailedDescription} required className="glass border-white/10 min-h-[100px]" />
-            </div>
-            <div className="space-y-2">
-              <Label>Image URL (Cloudinary)</Label>
-              <Input name="imageUrl" defaultValue={editingProject?.imageUrl} required className="glass border-white/10" placeholder="https://res.cloudinary.com/..." />
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <Label>GitHub URL</Label>
-                <Input name="githubUrl" defaultValue={editingProject?.githubUrl} className="glass border-white/10" />
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <Label>GitHub URL</Label>
+                  <Input name="githubUrl" defaultValue={editingProject?.githubUrl} className="glass border-white/10 h-12" placeholder="https://github.com/..." />
+                </div>
+                <div className="space-y-2">
+                  <Label>Live Demo URL</Label>
+                  <Input name="liveDemoUrl" defaultValue={editingProject?.liveDemoUrl} className="glass border-white/10 h-12" placeholder="https://demo.com/..." />
+                </div>
               </div>
-              <div className="space-y-2">
-                <Label>Live Demo URL</Label>
-                <Input name="liveDemoUrl" defaultValue={editingProject?.liveDemoUrl} className="glass border-white/10" />
+              
+              <div className="flex justify-end gap-4 pt-6 border-t border-white/5">
+                <Button type="button" variant="ghost" onClick={() => setModalOpen(false)}>Cancel</Button>
+                <Button type="submit" disabled={submitting || !imageUrl} className="bg-primary hover:bg-primary/90 text-white px-8 h-12 font-bold gap-2 rounded-xl orange-glow">
+                  {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+                  {editingProject ? "Update Project" : "Create Project"}
+                </Button>
               </div>
-            </div>
-            <div className="flex justify-end gap-4 pt-4 border-t border-white/5">
-              <Button type="button" variant="ghost" onClick={() => setModalOpen(false)}>Cancel</Button>
-              <Button type="submit" disabled={submitting} className="bg-primary hover:bg-primary/90 text-white px-8 font-bold gap-2">
-                {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-                {editingProject ? "Update Project" : "Create Project"}
-              </Button>
-            </div>
-          </form>
+            </form>
+          </div>
         </DialogContent>
       </Dialog>
     </div>

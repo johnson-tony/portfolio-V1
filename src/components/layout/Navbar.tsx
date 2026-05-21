@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { motion } from "framer-motion";
+import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
@@ -70,9 +70,6 @@ export default function Navbar() {
               />
             </Link>
           ))}
-          <Button variant="outline" className="glass border-white/10 hover:bg-white/10" nativeButton={false} render={<Link href="/admin" />}>
-            Admin Login
-          </Button>
         </div>
 
         {/* Mobile Toggle */}
@@ -81,22 +78,20 @@ export default function Navbar() {
             <SheetTrigger render={<Button variant="ghost" size="icon" className="text-white hover:bg-white/10" />}>
               <Menu className="w-6 h-6" />
             </SheetTrigger>
-            <SheetContent side="right" className="glass-dark border-white/10 text-white">
+            <SheetContent side="bottom" className="glass-dark border-white/10 text-white rounded-t-[2.5rem] p-8 pb-12">
               <SheetTitle className="text-white sr-only">Navigation Menu</SheetTitle>
-              <div className="flex flex-col gap-6 mt-12">
+              <div className="flex flex-col items-center gap-8 mt-4">
+                <div className="w-12 h-1.5 bg-white/10 rounded-full mb-4" /> {/* Handle bar */}
                 {navLinks.map((link) => (
                   <Link
                     key={link.name}
                     href={link.href}
                     onClick={(e) => scrollToSection(e, link.href)}
-                    className="text-2xl font-semibold hover:text-primary transition-colors"
+                    className="text-md md:text-2xl font-bold tracking-tight hover:text-primary transition-colors"
                   >
                     {link.name}
                   </Link>
                 ))}
-                <Button className="mt-4 bg-primary hover:bg-primary/80 text-white" nativeButton={false} render={<Link href="/admin" onClick={() => setIsOpen(false)} />}>
-                  Admin Login
-                </Button>
               </div>
             </SheetContent>
           </Sheet>

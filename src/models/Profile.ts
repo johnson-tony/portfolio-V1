@@ -10,7 +10,6 @@ const ProfileSchema = new Schema({
     year: String 
   }],
   skills: [String],
-  resumeUrl: String,
   socialLinks: {
     github: String,
     linkedin: String,

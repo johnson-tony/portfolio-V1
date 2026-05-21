@@ -21,7 +21,6 @@ export const profileSchema = z.object({
   title: z.string().min(2, "Title must be at least 2 characters"),
   about: z.string().min(20, "About section must be at least 20 characters"),
   skills: z.array(z.string()).min(1, "At least one skill is required"),
-  resumeUrl: z.string().url("Invalid resume URL").optional().or(z.literal("")),
   socialLinks: z.object({
     github: z.string().url().optional().or(z.literal("")),
     linkedin: z.string().url().optional().or(z.literal("")),

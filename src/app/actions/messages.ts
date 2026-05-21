@@ -4,9 +4,12 @@ import dbConnect from "@/lib/mongodb";
 import Message from "@/models/Message";
 import { revalidatePath } from "next/cache";
 
+import { checkAuth, ActionResponse } from "@/lib/safe-action";
+
 export async function getMessages() {
-  await dbConnect();
   try {
+    await checkAuth();
+    await dbConnect();
     const messages = await Message.find({}).sort({ createdAt: -1 }).lean();
     return JSON.parse(JSON.stringify(messages));
   } catch (error) {
@@ -15,24 +18,28 @@ export async function getMessages() {
   }
 }
 
-export async function markAsRead(id: string) {
-  await dbConnect();
+export async function markAsRead(id: string): Promise<ActionResponse> {
   try {
+    await checkAuth();
+    await dbConnect();
     await Message.findByIdAndUpdate(id, { isRead: true });
     revalidatePath("/admin/dashboard/messages");
     return { success: true };
   } catch (error: any) {
-    return { success: false, error: error.message };
+    console.error("Mark Message Read Error:", error);
+    return { success: false, error: error.message || "Failed to mark message as read" };
   }
 }
 
-export async function deleteMessage(id: string) {
-  await dbConnect();
+export async function deleteMessage(id: string): Promise<ActionResponse> {
   try {
+    await checkAuth();
+    await dbConnect();
     await Message.findByIdAndDelete(id);
     revalidatePath("/admin/dashboard/messages");
     return { success: true };
   } catch (error: any) {
-    return { success: false, error: error.message };
+    console.error("Delete Message Error:", error);
+    return { success: false, error: error.message || "Failed to delete message" };
   }
 }

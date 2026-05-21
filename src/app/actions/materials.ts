@@ -51,3 +51,20 @@ export async function deleteMaterial(id: string): Promise<ActionResponse> {
     return { success: false, error: error.message || "Failed to delete material" };
   }
 }
+
+export async function updateMaterial(id: string, data: any): Promise<ActionResponse> {
+  try {
+    await checkAuth();
+    await dbConnect();
+    
+    const validatedData = materialSchema.parse(data);
+    await Material.findByIdAndUpdate(id, validatedData);
+    
+    revalidatePath("/");
+    revalidatePath("/admin/dashboard/materials");
+    return { success: true };
+  } catch (error: any) {
+    console.error("Update Material Error:", error);
+    return { success: false, error: error.message || "Failed to update material" };
+  }
+}

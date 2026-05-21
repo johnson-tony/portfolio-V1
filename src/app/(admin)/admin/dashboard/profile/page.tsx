@@ -2,28 +2,49 @@
 
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { motion } from "framer-motion";
-import { Save, Loader2, Plus, Trash2 } from "lucide-react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { motion, AnimatePresence } from "framer-motion";
+import { Save, Loader2, Plus, Trash2, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { getProfile, updateProfile } from "@/app/actions/profile";
+import { profileSchema } from "@/lib/validations";
 
 export default function ProfileManagement() {
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
   
-  const { register, handleSubmit, reset, setValue, watch } = useForm();
+  const { register, handleSubmit, reset, setValue, watch, formState: { errors } } = useForm({
+    resolver: zodResolver(profileSchema),
+    defaultValues: {
+      name: "",
+      title: "",
+      about: "",
+      skills: [],
+      education: [],
+      socialLinks: {
+        github: "",
+        linkedin: "",
+        twitter: "",
+        email: ""
+      }
+    }
+  });
   
-  const education = watch("education") || [];
-  const skills = watch("skills") || [];
+  const education = watch("education");
+  const skills = watch("skills");
 
   useEffect(() => {
     async function loadData() {
       const data = await getProfile();
       if (data) {
+        // Ensure arrays exist
+        data.skills = data.skills || [];
+        data.education = data.education || [];
+        data.socialLinks = data.socialLinks || {};
         reset(data);
       }
       setFetching(false);
@@ -50,6 +71,21 @@ export default function ProfileManagement() {
     setValue("education", education.filter((_: any, i: number) => i !== index));
   };
 
+  const ErrorMsg = ({ message }: { message?: string }) => (
+    <AnimatePresence>
+      {message && (
+        <motion.p 
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          className="text-red-400 text-xs mt-1.5 flex items-center gap-1 font-medium"
+        >
+          <AlertCircle className="w-3 h-3" /> {message}
+        </motion.p>
+      )}
+    </AnimatePresence>
+  );
+
   if (fetching) return <div className="flex items-center justify-center h-64"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>;
 
   return (
@@ -65,17 +101,20 @@ export default function ProfileManagement() {
           <h3 className="text-xl font-bold border-b border-white/5 pb-4">Basic Information</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <Label>Full Name</Label>
-              <Input {...register("name", { required: true })} className="glass border-white/10" placeholder="John Doe" />
+              <Label className={errors.name ? "text-red-400" : ""}>Full Name</Label>
+              <Input {...register("name")} className={`glass border-white/10 ${errors.name ? "border-red-500/50" : ""}`} placeholder="John Doe" />
+              <ErrorMsg message={errors.name?.message as string} />
             </div>
             <div className="space-y-2">
-              <Label>Professional Title</Label>
-              <Input {...register("title", { required: true })} className="glass border-white/10" placeholder="Full-Stack Developer" />
+              <Label className={errors.title ? "text-red-400" : ""}>Professional Title</Label>
+              <Input {...register("title")} className={`glass border-white/10 ${errors.title ? "border-red-500/50" : ""}`} placeholder="Full-Stack Developer" />
+              <ErrorMsg message={errors.title?.message as string} />
             </div>
           </div>
           <div className="space-y-2">
-            <Label>About Me</Label>
-            <Textarea {...register("about", { required: true })} className="glass border-white/10 min-h-[150px]" placeholder="Tell the world about yourself..." />
+            <Label className={errors.about ? "text-red-400" : ""}>About Me</Label>
+            <Textarea {...register("about")} className={`glass border-white/10 min-h-[150px] ${errors.about ? "border-red-500/50" : ""}`} placeholder="Tell the world about yourself..." />
+            <ErrorMsg message={errors.about?.message as string} />
           </div>
         </div>
 
@@ -118,13 +157,14 @@ export default function ProfileManagement() {
         <div className="glass-dark p-8 rounded-3xl border border-white/5 space-y-6">
           <h3 className="text-xl font-bold border-b border-white/5 pb-4">Skills</h3>
           <div className="space-y-2">
-            <Label>Skills (Comma separated)</Label>
+            <Label className={errors.skills ? "text-red-400" : ""}>Skills (Comma separated)</Label>
             <Input 
               placeholder="Next.js, React, TypeScript..." 
-              className="glass border-white/10"
-              onChange={(e) => setValue("skills", e.target.value.split(",").map(s => s.trim()))}
-              defaultValue={skills.join(", ")}
+              className={`glass border-white/10 ${errors.skills ? "border-red-500/50" : ""}`}
+              value={skills.join(", ")}
+              onChange={(e) => setValue("skills", e.target.value.split(",").map(s => s.trim()), { shouldValidate: true })}
             />
+            <ErrorMsg message={errors.skills?.message as string} />
             <p className="text-xs text-gray-500 italic">Example: Next.js, React, TypeScript, Node.js</p>
           </div>
         </div>
@@ -134,24 +174,24 @@ export default function ProfileManagement() {
           <h3 className="text-xl font-bold border-b border-white/5 pb-4">Social & Links</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <Label>GitHub URL</Label>
-              <Input {...register("socialLinks.github")} className="glass border-white/10" />
+              <Label className={errors.socialLinks?.github ? "text-red-400" : ""}>GitHub URL</Label>
+              <Input {...register("socialLinks.github")} className={`glass border-white/10 ${errors.socialLinks?.github ? "border-red-500/50" : ""}`} />
+              <ErrorMsg message={errors.socialLinks?.github?.message as string} />
             </div>
             <div className="space-y-2">
-              <Label>LinkedIn URL</Label>
-              <Input {...register("socialLinks.linkedin")} className="glass border-white/10" />
+              <Label className={errors.socialLinks?.linkedin ? "text-red-400" : ""}>LinkedIn URL</Label>
+              <Input {...register("socialLinks.linkedin")} className={`glass border-white/10 ${errors.socialLinks?.linkedin ? "border-red-500/50" : ""}`} />
+              <ErrorMsg message={errors.socialLinks?.linkedin?.message as string} />
             </div>
             <div className="space-y-2">
-              <Label>Twitter URL</Label>
-              <Input {...register("socialLinks.twitter")} className="glass border-white/10" />
+              <Label className={errors.socialLinks?.twitter ? "text-red-400" : ""}>Twitter URL</Label>
+              <Input {...register("socialLinks.twitter")} className={`glass border-white/10 ${errors.socialLinks?.twitter ? "border-red-500/50" : ""}`} />
+              <ErrorMsg message={errors.socialLinks?.twitter?.message as string} />
             </div>
             <div className="space-y-2">
-              <Label>Contact Email</Label>
-              <Input {...register("socialLinks.email")} className="glass border-white/10" />
-            </div>
-            <div className="md:col-span-2 space-y-2">
-              <Label>Resume Link (Cloudinary URL)</Label>
-              <Input {...register("resumeUrl")} className="glass border-white/10" placeholder="https://res.cloudinary.com/..." />
+              <Label className={errors.socialLinks?.email ? "text-red-400" : ""}>Contact Email</Label>
+              <Input {...register("socialLinks.email")} className={`glass border-white/10 ${errors.socialLinks?.email ? "border-red-500/50" : ""}`} />
+              <ErrorMsg message={errors.socialLinks?.email?.message as string} />
             </div>
           </div>
         </div>

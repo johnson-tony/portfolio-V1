@@ -62,11 +62,11 @@ export default function SettingsManagement() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label>Site Title</Label>
-              <Input name="siteTitle" defaultValue={settings?.siteTitle} className="glass border-white/10" />
+              <Input name="siteTitle" defaultValue={settings?.siteTitle || ""} className="glass border-white/10" />
             </div>
             <div className="space-y-2">
               <Label>Logo URL (Cloudinary)</Label>
-              <Input name="logoUrl" defaultValue={settings?.logoUrl} className="glass border-white/10" />
+              <Input name="logoUrl" defaultValue={settings?.logoUrl || ""} className="glass border-white/10" />
             </div>
           </div>
         </div>
@@ -80,11 +80,11 @@ export default function SettingsManagement() {
           <div className="space-y-4">
             <div className="space-y-2">
               <Label>Hero Heading</Label>
-              <Input name="heroHeading" defaultValue={settings?.heroHeading} className="glass border-white/10" />
+              <Input name="heroHeading" defaultValue={settings?.heroHeading || ""} className="glass border-white/10" />
             </div>
             <div className="space-y-2">
               <Label>Hero Subheading</Label>
-              <Input name="heroSubheading" defaultValue={settings?.heroSubheading} className="glass border-white/10" />
+              <Input name="heroSubheading" defaultValue={settings?.heroSubheading || ""} className="glass border-white/10" />
             </div>
           </div>
         </div>
@@ -99,7 +99,7 @@ export default function SettingsManagement() {
             <div className="space-y-2">
               <Label>Primary Accent Color (Hex)</Label>
               <div className="flex gap-4">
-                <Input name="accentColor" defaultValue={settings?.accentColor} className="glass border-white/10 flex-1" />
+                <Input name="accentColor" defaultValue={settings?.accentColor || ""} className="glass border-white/10 flex-1" />
                 <div 
                   className="w-12 h-12 rounded-xl border border-white/10" 
                   style={{ backgroundColor: settings?.accentColor || "#F97316" }} 

@@ -2,8 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Download, GraduationCap, Github, Linkedin, Twitter, Mail } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { GraduationCap, Github, Linkedin, Twitter, Mail } from "lucide-react";
 
 const skills = [
   "Next.js", "React", "TypeScript", "Node.js", "Express", "MongoDB", 
@@ -78,11 +77,6 @@ export default function Profile() {
               </div>
 
               <div className="space-y-4 pt-4 border-t border-white/5">
-                <Button className="w-full h-12 bg-white text-black hover:bg-white/90 rounded-2xl font-bold gap-2">
-                  <Download className="w-4 h-4" />
-                  Download Resume
-                </Button>
-                
                 <div className="flex items-center justify-center gap-4 pt-2">
                   {[
                     { icon: Github, href: "#" },

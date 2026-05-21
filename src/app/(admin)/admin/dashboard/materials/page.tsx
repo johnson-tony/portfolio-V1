@@ -1,20 +1,23 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Plus, Trash2, Loader2, Save, FileText, Search } from "lucide-react";
+import { Plus, Trash2, Loader2, Save, FileText, Search, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { getMaterials, addMaterial, deleteMaterial } from "@/app/actions/materials";
+import { getMaterials, addMaterial, updateMaterial, deleteMaterial } from "@/app/actions/materials";
+import FileUpload from "@/components/admin/FileUpload";
 
 export default function MaterialsManagement() {
   const [materials, setMaterials] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
+  const [editingMaterial, setEditingMaterial] = useState<any | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [fileUrl, setFileUrl] = useState("");
 
   useEffect(() => {
     loadMaterials();
@@ -34,18 +37,26 @@ export default function MaterialsManagement() {
     const data = {
       title: formData.get("title"),
       category: formData.get("category"),
-      fileUrl: formData.get("fileUrl"),
-      thumbnailUrl: formData.get("thumbnailUrl"),
+      fileUrl: fileUrl,
+      thumbnailUrl: formData.get("thumbnailUrl") || "",
     };
 
-    const res = await addMaterial(data);
+    let res;
+    if (editingMaterial) {
+      res = await updateMaterial(editingMaterial._id, data);
+    } else {
+      res = await addMaterial(data);
+    }
+
     setSubmitting(false);
     if (res.success) {
-      toast.success("Material added successfully!");
+      toast.success(editingMaterial ? "Material updated successfully!" : "Material added successfully!");
       setModalOpen(false);
+      setFileUrl("");
+      setEditingMaterial(null);
       loadMaterials();
     } else {
-      toast.error(res.error || "Failed to add material");
+      toast.error(res.error || "Failed to save material");
     }
   };
 
@@ -58,6 +69,12 @@ export default function MaterialsManagement() {
     } else {
       toast.error("Failed to delete material");
     }
+  };
+
+  const openModal = (material: any = null) => {
+    setEditingMaterial(material);
+    setFileUrl(material?.fileUrl || "");
+    setModalOpen(true);
   };
 
   const filteredMaterials = materials.filter(m => 
@@ -74,7 +91,7 @@ export default function MaterialsManagement() {
           <h1 className="text-3xl font-bold tracking-tight">Resource Management</h1>
           <p className="text-gray-500 mt-1">Manage PDF guides and technical resources.</p>
         </div>
-        <Button onClick={() => setModalOpen(true)} className="h-12 bg-primary hover:bg-primary/90 text-white rounded-2xl orange-glow gap-2 font-bold px-6">
+        <Button onClick={() => openModal()} className="h-12 bg-primary hover:bg-primary/90 text-white rounded-2xl orange-glow gap-2 font-bold px-6">
           <Plus className="w-5 h-5" /> Add New Material
         </Button>
       </div>
@@ -95,7 +112,6 @@ export default function MaterialsManagement() {
             <tr className="border-b border-white/5 bg-white/5">
               <th className="px-6 py-4 font-bold text-sm uppercase tracking-widest text-gray-500">Resource</th>
               <th className="px-6 py-4 font-bold text-sm uppercase tracking-widest text-gray-500">Category</th>
-              <th className="px-6 py-4 font-bold text-sm uppercase tracking-widest text-gray-500">Added Date</th>
               <th className="px-6 py-4 font-bold text-sm uppercase tracking-widest text-gray-500 text-right">Actions</th>
             </tr>
           </thead>
@@ -115,18 +131,25 @@ export default function MaterialsManagement() {
                     {item.category}
                   </span>
                 </td>
-                <td className="px-6 py-4 text-gray-500 text-sm">
-                  {new Date(item.createdAt).toLocaleDateString()}
-                </td>
                 <td className="px-6 py-4 text-right">
-                  <Button 
-                    size="icon" 
-                    variant="ghost" 
-                    onClick={() => handleDelete(item._id)}
-                    className="text-gray-500 hover:text-red-400 hover:bg-red-400/10 rounded-xl"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
+                  <div className="flex justify-end gap-2">
+                    <Button 
+                      size="icon" 
+                      variant="ghost" 
+                      onClick={() => openModal(item)}
+                      className="text-gray-500 hover:text-white hover:bg-white/10 rounded-xl"
+                    >
+                      <Pencil className="w-4 h-4" />
+                    </Button>
+                    <Button 
+                      size="icon" 
+                      variant="ghost" 
+                      onClick={() => handleDelete(item._id)}
+                      className="text-gray-500 hover:text-red-400 hover:bg-red-400/10 rounded-xl"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
                 </td>
               </tr>
             ))}
@@ -137,36 +160,67 @@ export default function MaterialsManagement() {
         )}
       </div>
 
-      <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-        <DialogContent className="max-w-xl glass-dark border-white/10 text-white">
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-bold">Add New Resource</DialogTitle>
-          </DialogHeader>
-          <form onSubmit={handleSubmit} className="space-y-6 mt-4">
-            <div className="space-y-2">
-              <Label>Title</Label>
-              <Input name="title" required className="glass border-white/10" placeholder="e.g. Next.js Performance Guide" />
-            </div>
-            <div className="space-y-2">
-              <Label>Category</Label>
-              <Input name="category" required className="glass border-white/10" placeholder="e.g. Technical, Design, Guide" />
-            </div>
-            <div className="space-y-2">
-              <Label>File URL (PDF on Cloudinary)</Label>
-              <Input name="fileUrl" required className="glass border-white/10" placeholder="https://res.cloudinary.com/..." />
-            </div>
-            <div className="space-y-2">
-              <Label>Thumbnail URL (Optional)</Label>
-              <Input name="thumbnailUrl" className="glass border-white/10" placeholder="https://res.cloudinary.com/..." />
-            </div>
-            <div className="flex justify-end gap-4 pt-4 border-t border-white/5">
-              <Button type="button" variant="ghost" onClick={() => setModalOpen(false)}>Cancel</Button>
-              <Button type="submit" disabled={submitting} className="bg-primary hover:bg-primary/90 text-white px-8 font-bold gap-2">
-                {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-                Add Resource
-              </Button>
-            </div>
-          </form>
+      <Dialog open={modalOpen} onOpenChange={(open) => {
+        setModalOpen(open);
+        if (!open) {
+          setEditingMaterial(null);
+          setFileUrl("");
+        }
+      }}>
+        <DialogContent className="max-w-xl glass-dark border-white/10 text-white p-0 overflow-hidden">
+          <div className="p-8 space-y-6">
+            <DialogHeader>
+              <DialogTitle className="text-2xl font-bold">
+                {editingMaterial ? "Edit Resource" : "Add New Resource"}
+              </DialogTitle>
+            </DialogHeader>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="space-y-2">
+                <Label>Title</Label>
+                <Input 
+                  name="title" 
+                  required 
+                  defaultValue={editingMaterial?.title || ""} 
+                  className="glass border-white/10 h-12" 
+                  placeholder="e.g. Next.js Performance Guide" 
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Category</Label>
+                <Input 
+                  name="category" 
+                  required 
+                  defaultValue={editingMaterial?.category || ""} 
+                  className="glass border-white/10 h-12" 
+                  placeholder="e.g. Technical, Design, Guide" 
+                />
+              </div>
+              
+              <FileUpload 
+                label="PDF Document" 
+                accept="application/pdf"
+                currentUrl={fileUrl}
+                onUploadComplete={(url) => setFileUrl(url)}
+              />
+
+              <div className="space-y-2">
+                <Label>Thumbnail URL (Optional)</Label>
+                <Input 
+                  name="thumbnailUrl" 
+                  defaultValue={editingMaterial?.thumbnailUrl || ""} 
+                  className="glass border-white/10 h-12" 
+                  placeholder="https://res.cloudinary.com/..." 
+                />
+              </div>
+              <div className="flex justify-end gap-4 pt-6 border-t border-white/5">
+                <Button type="button" variant="ghost" onClick={() => setModalOpen(false)}>Cancel</Button>
+                <Button type="submit" disabled={submitting || !fileUrl} className="bg-primary hover:bg-primary/90 text-white px-8 h-12 font-bold gap-2 rounded-xl orange-glow">
+                  {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+                  {editingMaterial ? "Update Resource" : "Add Resource"}
+                </Button>
+              </div>
+            </form>
+          </div>
         </DialogContent>
       </Dialog>
     </div>
