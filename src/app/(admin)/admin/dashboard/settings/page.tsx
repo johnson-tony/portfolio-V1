@@ -54,64 +54,64 @@ export default function SettingsManagement() {
 
       <form onSubmit={handleSubmit} className="space-y-8">
         {/* Branding */}
-        <div className="glass-dark p-8 rounded-3xl border border-white/5 space-y-6">
-          <h3 className="text-xl font-bold flex items-center gap-2 border-b border-white/5 pb-4">
+        <div className="glass-dark p-8 rounded-none border border-white/5 space-y-6">
+          <h3 className="text-xl font-bold flex items-center gap-2 border-b border-white/5 pb-4 uppercase tracking-tighter">
             <Globe className="w-5 h-5 text-primary" />
             General Branding
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <Label>Site Title</Label>
-              <Input name="siteTitle" defaultValue={settings?.siteTitle || ""} className="glass border-white/10" />
+              <Label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Site Title</Label>
+              <Input name="siteTitle" defaultValue={settings?.siteTitle || ""} className="glass border-white/10 h-11 rounded-none border-x-0 border-t-0 border-b focus:ring-0 focus:border-primary transition-all text-sm" />
             </div>
             <div className="space-y-2">
-              <Label>Logo URL (Cloudinary)</Label>
-              <Input name="logoUrl" defaultValue={settings?.logoUrl || ""} className="glass border-white/10" />
+              <Label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Logo URL (Cloudinary)</Label>
+              <Input name="logoUrl" defaultValue={settings?.logoUrl || ""} className="glass border-white/10 h-11 rounded-none border-x-0 border-t-0 border-b focus:ring-0 focus:border-primary transition-all text-sm" />
             </div>
           </div>
         </div>
 
         {/* Hero Content */}
-        <div className="glass-dark p-8 rounded-3xl border border-white/5 space-y-6">
-          <h3 className="text-xl font-bold flex items-center gap-2 border-b border-white/5 pb-4">
+        <div className="glass-dark p-8 rounded-none border border-white/5 space-y-6">
+          <h3 className="text-xl font-bold flex items-center gap-2 border-b border-white/5 pb-4 uppercase tracking-tighter">
             <Layout className="w-5 h-5 text-primary" />
             Hero Section Content
           </h3>
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label>Hero Heading</Label>
-              <Input name="heroHeading" defaultValue={settings?.heroHeading || ""} className="glass border-white/10" />
+              <Label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Hero Heading</Label>
+              <Input name="heroHeading" defaultValue={settings?.heroHeading || ""} className="glass border-white/10 h-11 rounded-none border-x-0 border-t-0 border-b focus:ring-0 focus:border-primary transition-all text-sm" />
             </div>
             <div className="space-y-2">
-              <Label>Hero Subheading</Label>
-              <Input name="heroSubheading" defaultValue={settings?.heroSubheading || ""} className="glass border-white/10" />
+              <Label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Hero Subheading</Label>
+              <Input name="heroSubheading" defaultValue={settings?.heroSubheading || ""} className="glass border-white/10 h-11 rounded-none border-x-0 border-t-0 border-b focus:ring-0 focus:border-primary transition-all text-sm" />
             </div>
           </div>
         </div>
 
         {/* Theme */}
-        <div className="glass-dark p-8 rounded-3xl border border-white/5 space-y-6">
-          <h3 className="text-xl font-bold flex items-center gap-2 border-b border-white/5 pb-4">
+        <div className="glass-dark p-8 rounded-none border border-white/5 space-y-6">
+          <h3 className="text-xl font-bold flex items-center gap-2 border-b border-white/5 pb-4 uppercase tracking-tighter">
             <Palette className="w-5 h-5 text-primary" />
             Theme Customization
           </h3>
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label>Primary Accent Color (Hex)</Label>
+              <Label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Primary Accent Color (Hex)</Label>
               <div className="flex gap-4">
-                <Input name="accentColor" defaultValue={settings?.accentColor || ""} className="glass border-white/10 flex-1" />
+                <Input name="accentColor" defaultValue={settings?.accentColor || ""} className="glass border-white/10 h-11 rounded-none border-x-0 border-t-0 border-b focus:ring-0 focus:border-primary transition-all text-sm flex-1" />
                 <div 
-                  className="w-12 h-12 rounded-xl border border-white/10" 
+                  className="w-11 h-11 rounded-none border border-white/10" 
                   style={{ backgroundColor: settings?.accentColor || "#F97316" }} 
                 />
               </div>
-              <p className="text-xs text-gray-500 italic">Default is #F97316 (Orange). This will update key highlights.</p>
+              <p className="text-[10px] text-gray-500 italic">Default is #F97316 (Orange). This will update key highlights.</p>
             </div>
           </div>
         </div>
 
         <div className="flex justify-end">
-          <Button type="submit" disabled={updating} className="h-14 px-12 bg-primary hover:bg-primary/90 text-white font-bold text-lg rounded-2xl orange-glow gap-2">
+          <Button type="submit" disabled={updating} className="h-14 px-12 bg-primary hover:bg-primary/90 text-white font-bold text-lg rounded-none orange-glow gap-2 uppercase tracking-widest">
             {updating ? <Loader2 className="w-6 h-6 animate-spin" /> : <Save className="w-6 h-6" />}
             Apply System Settings
           </Button>

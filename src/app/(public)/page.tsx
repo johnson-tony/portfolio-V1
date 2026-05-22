@@ -5,16 +5,27 @@ import Materials from "@/components/home/Materials";
 import Contact from "@/components/home/Contact";
 import PageWrapper from "@/components/layout/PageWrapper";
 import { getProjects } from "@/app/actions/projects";
+import { getSettings } from "@/app/actions/settings";
+import { getProfile } from "@/app/actions/profile";
+import { getMaterials } from "@/app/actions/materials";
 
 export default async function Home() {
-  const projects = await getProjects();
+  const [projects, settings, profile, materials] = await Promise.all([
+    getProjects(),
+    getSettings(),
+    getProfile(),
+    getMaterials(),
+  ]);
 
   return (
     <PageWrapper>
-      <Hero />
-      <Profile />
+      <Hero 
+        heading={settings?.heroHeading} 
+        subheading={settings?.heroSubheading} 
+      />
+      <Profile data={profile} />
       <Projects initialProjects={projects} />
-      <Materials />
+      <Materials initialMaterials={materials} />
       <Contact />
     </PageWrapper>
   );

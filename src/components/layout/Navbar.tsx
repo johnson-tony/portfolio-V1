@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,16 +10,17 @@ import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/s
 import { cn } from "@/lib/utils";
 
 const navLinks = [
-  { name: "Hero", href: "#hero" },
-  { name: "Profile", href: "#profile" },
-  { name: "Projects", href: "#projects" },
-  { name: "Materials", href: "#materials" },
-  { name: "Contact", href: "#contact" },
+  { name: "Hero", href: "/#hero" },
+  { name: "Profile", href: "/#profile" },
+  { name: "Projects", href: "/#projects" },
+  { name: "Materials", href: "/#materials" },
+  { name: "Contact", href: "/#contact" },
 ];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,11 +30,14 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault();
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (pathname === "/") {
+      e.preventDefault();
+      const targetId = href.replace("/#", "#");
+      const element = document.querySelector(targetId);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
     }
     setIsOpen(false);
   };
@@ -60,7 +65,8 @@ export default function Navbar() {
             <Link
               key={link.name}
               href={link.href}
-              onClick={(e) => scrollToSection(e, link.href)}
+              prefetch={false}
+              onClick={(e) => handleNavClick(e, link.href)}
               className="relative group text-sm font-medium text-gray-400 hover:text-white transition-colors"
             >
               {link.name}
@@ -86,7 +92,8 @@ export default function Navbar() {
                   <Link
                     key={link.name}
                     href={link.href}
-                    onClick={(e) => scrollToSection(e, link.href)}
+                    prefetch={false}
+                    onClick={(e) => handleNavClick(e, link.href)}
                     className="text-md md:text-2xl font-bold tracking-tight hover:text-primary transition-colors"
                   >
                     {link.name}

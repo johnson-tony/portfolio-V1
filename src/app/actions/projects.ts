@@ -17,6 +17,17 @@ export async function getProjects() {
   }
 }
 
+export async function getProjectById(id: string) {
+  await dbConnect();
+  try {
+    const project = await Project.findById(id).lean();
+    return project ? JSON.parse(JSON.stringify(project)) : null;
+  } catch (error) {
+    console.error("Fetch Project Error:", error);
+    return null;
+  }
+}
+
 export async function addProject(data: any): Promise<ActionResponse> {
   try {
     await checkAuth();

@@ -4,6 +4,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 interface HeroProps {
   heading?: string;
@@ -42,31 +43,34 @@ export default function Hero({ heading, subheading }: HeroProps) {
           transition={{ duration: 0.8 }}
         >
           <span className="inline-block px-4 py-1.5 rounded-full border border-primary/30 bg-primary/10 text-primary text-xs font-bold tracking-widest uppercase mb-8 orange-glow backdrop-blur-sm">
-            Premium Portfolio v2.5
+            Available for Projects
           </span>
-          <h1 className="text-5xl md:text-8xl font-extrabold tracking-tighter mb-8 bg-clip-text text-transparent bg-gradient-to-b from-white via-white to-white/40 leading-[1.1] pb-2">
-            {heading || "Building the Future of"} <br />
-            <span className="text-primary italic font-serif">SaaS Experiences</span>
+          <h1 className="text-3xl md:text-5xl font-extrabold tracking-tighter mb-8 bg-clip-text text-transparent bg-gradient-to-b from-white via-white to-white/40 leading-[1.1] pb-2">
+            {heading || "Building the Future of SaaS Experiences"}
           </h1>
-          <p className="text-gray-400 text-lg md:text-2xl max-w-3xl mx-auto mb-12 leading-relaxed font-medium">
+          <p className="text-gray-400 text-base md:text-2xl max-w-3xl mx-auto mb-12 leading-relaxed font-medium">
             {subheading || "A highly polished, performance-driven developer portfolio inspired by the world's best SaaS platforms."}
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-            <Button 
-              size="lg" 
-              className="h-16 px-10 bg-primary hover:bg-primary/90 text-white rounded-2xl orange-glow-strong text-xl font-bold group transition-all duration-300 hover:scale-105 active:scale-95"
-            >
-              View My Work
-              <ArrowRight className="ml-3 w-6 h-6 group-hover:translate-x-1 transition-transform" />
-            </Button>
-            <Button 
-              size="lg" 
-              variant="outline" 
-              className="h-16 px-10 glass border-white/10 hover:bg-white/10 text-white rounded-2xl text-xl font-bold transition-all duration-300 hover:scale-105 active:scale-95"
-            >
-              Get in Touch
-            </Button>
+            <Link href="/#projects" prefetch={false}>
+              <Button 
+                size="lg" 
+                className="h-14 md:h-16 px-8 md:px-10 bg-primary hover:bg-primary/90 text-white rounded-2xl orange-glow-strong text-lg md:text-xl font-bold group transition-all duration-300 hover:scale-105 active:scale-95"
+              >
+                View My Work
+                <ArrowRight className="ml-3 w-5 h-5 md:w-6 md:h-6 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </Link>
+            <Link href="/#contact" prefetch={false}>
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="h-14 md:h-16 px-8 md:px-10 glass border-white/10 hover:bg-white/10 text-white rounded-2xl text-lg md:text-xl font-bold transition-all duration-300 hover:scale-105 active:scale-95"
+              >
+                Get in Touch
+              </Button>
+            </Link>
           </div>
         </motion.div>
       </div>
