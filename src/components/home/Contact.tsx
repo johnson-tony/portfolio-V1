@@ -38,6 +38,7 @@ export default function Contact() {
       formData.append("name", data.name);
       formData.append("email", data.email);
       formData.append("message", data.message);
+      formData.append("website", data.website || "");
       
       const result = await sendContactMessage(formData);
 
@@ -56,12 +57,12 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="py-24 px-6 relative overflow-hidden">
+    <section id="contact" className="pt-20 pb-12 px-6 relative overflow-hidden">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[100px] -z-10" />
 
       <div className="max-w-xl mx-auto">
-        <div className="text-center space-y-3 mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Get in Touch</h2>
+        <div className="text-center space-y-3 mb-10 md:mb-12">
+          <h2 className="text-3xl md:text-5xl font-bold tracking-tighter text-gradient">Get in Touch</h2>
           <p className="text-gray-400 text-sm md:text-base">
             Drop me a message and I'll get back to you soon.
           </p>
@@ -71,7 +72,7 @@ export default function Contact() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="glass-dark p-8 md:p-12 rounded-none border border-white/5 relative"
+          className="glass-dark p-8 md:p-12 rounded-2xl border border-white/5 relative hover:animate-glow transition-all"
         >
           {submitted ? (
             <motion.div 
@@ -79,7 +80,7 @@ export default function Contact() {
               animate={{ opacity: 1, scale: 1 }}
               className="text-center py-10 space-y-6"
             >
-              <div className="w-16 h-16 bg-primary/20 rounded-none flex items-center justify-center mx-auto text-primary">
+              <div className="w-16 h-16 bg-primary/20 rounded-2xl flex items-center justify-center mx-auto text-primary">
                 <CheckCircle2 className="w-8 h-8" />
               </div>
               <div className="space-y-2">
@@ -95,7 +96,15 @@ export default function Contact() {
               </Button>
             </motion.div>
           ) : (
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+              <input
+                type="text"
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                className="hidden"
+                {...register("website")}
+              />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <div className="space-y-1.5">
                   <Label htmlFor="name" className="text-[10px] font-bold uppercase tracking-widest text-gray-500 ml-1">Name</Label>
@@ -103,7 +112,7 @@ export default function Contact() {
                     id="name" 
                     {...register("name")}
                     placeholder="Your Name" 
-                    className={`h-10 px-0 bg-transparent border-white/10 rounded-none border-x-0 border-t-0 border-b focus:border-primary focus-visible:ring-0 transition-all text-base md:text-sm placeholder:text-gray-800 ${errors.name ? 'border-red-500' : ''}`}
+                    className={`bg-transparent border-white/10 hover:border-primary/40 hover:ring-2 hover:ring-primary/15 focus:border-primary/60 placeholder:text-gray-500 ${errors.name ? 'border-red-500' : ''}`}
                   />
                   {errors.name && <p className="text-red-500 text-[10px] mt-1 ml-1">{errors.name.message}</p>}
                 </div>
@@ -115,7 +124,7 @@ export default function Contact() {
                     type="email" 
                     {...register("email")}
                     placeholder="you@example.com" 
-                    className={`h-10 px-0 bg-transparent border-white/10 rounded-none border-x-0 border-t-0 border-b focus:border-primary focus-visible:ring-0 transition-all text-base md:text-sm placeholder:text-gray-800 ${errors.email ? 'border-red-500' : ''}`}
+                    className={`bg-transparent border-white/10 hover:border-primary/40 hover:ring-2 hover:ring-primary/15 focus:border-primary/60 placeholder:text-gray-500 ${errors.email ? 'border-red-500' : ''}`}
                   />
                   {errors.email && <p className="text-red-500 text-[10px] mt-1 ml-1">{errors.email.message}</p>}
                 </div>
@@ -127,7 +136,7 @@ export default function Contact() {
                   id="message" 
                   {...register("message")}
                   placeholder="How can I help?" 
-                  className={`min-h-[100px] px-0 bg-transparent border-white/10 rounded-none border-x-0 border-t-0 border-b focus:border-primary focus-visible:ring-0 transition-all text-base md:text-sm py-2 resize-none placeholder:text-gray-800 ${errors.message ? 'border-red-500' : ''}`}
+                  className={`min-h-[100px] bg-transparent border-white/10 hover:border-primary/40 hover:ring-2 hover:ring-primary/15 focus:border-primary/60 resize-none placeholder:text-gray-500 ${errors.message ? 'border-red-500' : ''}`}
                 />
                 {errors.message && <p className="text-red-500 text-[10px] mt-1 ml-1">{errors.message.message}</p>}
               </div>
@@ -135,7 +144,7 @@ export default function Contact() {
               <Button 
                 type="submit" 
                 disabled={loading}
-                className="w-full h-12 bg-primary hover:bg-primary/90 text-white rounded-none font-bold text-sm uppercase tracking-widest group transition-all"
+                className="w-full h-12 bg-primary hover:bg-primary/90 text-white rounded-2xl font-bold text-sm uppercase tracking-widest group transition-all"
               >
                 {loading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />

@@ -3,17 +3,23 @@
 import dbConnect from "@/lib/mongodb";
 import Message from "@/models/Message";
 import { Resend } from "resend";
+import { contactSchema } from "@/lib/validations";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function sendContactMessage(formData: FormData) {
-  const name = formData.get("name") as string;
-  const email = formData.get("email") as string;
-  const content = formData.get("message") as string;
+  const parsed = contactSchema.safeParse({
+    name: formData.get("name"),
+    email: formData.get("email"),
+    message: formData.get("message"),
+    website: formData.get("website"),
+  });
 
-  if (!name || !email || !content) {
-    throw new Error("Missing required fields");
+  if (!parsed.success) {
+    return { success: false, error: parsed.error.issues[0]?.message || "Invalid form data" };
   }
+
+  const { name, email, message: content } = parsed.data;
 
   await dbConnect();
 

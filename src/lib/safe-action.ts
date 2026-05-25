@@ -6,6 +6,12 @@ export async function checkAuth() {
   if (!session) {
     throw new Error("Unauthorized: You must be logged in as an admin to perform this action.");
   }
+
+  const role = (session.user as any)?.role;
+  if (role !== "admin") {
+    throw new Error("Forbidden: Admin access required.");
+  }
+
   return session;
 }
 

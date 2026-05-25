@@ -24,18 +24,18 @@ export default function Projects({ initialProjects }: { initialProjects: Project
   const projects = initialProjects;
 
   return (
-    <section id="projects" className="py-24 px-6 bg-black/20">
+    <section id="projects" className="pt-20 pb-10 px-6 bg-black/20">
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 md:mb-12">
           <div className="space-y-4">
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tight">Featured Projects</h2>
+            <h2 className="text-3xl md:text-5xl font-bold tracking-tighter text-gradient">Featured Projects</h2>
             <p className="text-gray-400 text-sm md:text-base max-w-xl leading-relaxed">
               A collection of high-impact digital products I've built, focusing on scalability and user experience.
             </p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project, index) => {
             const id = "_id" in project ? (project._id as string) : (project.id as string);
             return (
@@ -46,7 +46,7 @@ export default function Projects({ initialProjects }: { initialProjects: Project
                   transition={{ delay: index * 0.1 }}
                   viewport={{ once: true }}
                   whileHover={{ y: -5 }}
-                  className="group glass-dark rounded-2xl overflow-hidden border border-white/5 hover:border-primary/30 transition-all duration-500 h-full flex flex-col"
+                  className="group glass-dark rounded-2xl overflow-hidden border border-white/5 hover:border-primary/30 hover:animate-glow transition-all duration-500 h-full flex flex-col"
                 >
                   <div className="relative h-48 md:h-56 overflow-hidden">
                     <Image

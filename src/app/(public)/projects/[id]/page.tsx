@@ -18,7 +18,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
   return (
     <PageWrapper>
-      <div className="pt-32 pb-24 px-6">
+      <div className="pt-32 pb-12 px-6">
         <div className="max-w-5xl mx-auto">
           <Link href="/#projects">
             <Button variant="ghost" className="mb-8 gap-2 text-gray-400 hover:text-white group">
@@ -36,7 +36,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                   </Badge>
                 ))}
               </div>
-              <h1 className="text-4xl md:text-6xl font-bold tracking-tight">{project.title}</h1>
+              <h1 className="text-4xl md:text-7xl font-bold tracking-tighter text-gradient">{project.title}</h1>
               <p className="text-gray-400 text-lg md:text-xl max-w-3xl leading-relaxed">
                 {project.description}
               </p>

@@ -12,18 +12,18 @@ export default function Profile({ data }: ProfileProps) {
   if (!data) return null;
 
   return (
-    <section id="profile" className="py-24 px-6 relative">
+    <section id="profile" className="pt-20 pb-10 px-6 relative">
       <div className="max-w-7xl mx-auto">
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="grid grid-cols-1 lg:grid-cols-3 gap-12"
+          className="grid grid-cols-1 lg:grid-cols-3 gap-10"
         >
           {/* Left Column: About & Skills */}
-          <div className="lg:col-span-2 space-y-12">
+          <div className="lg:col-span-2 space-y-10">
             <div className="space-y-6">
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight">About Me</h2>
+              <h2 className="text-3xl md:text-5xl font-bold tracking-tighter text-gradient">About Me</h2>
               <div className="glass-dark p-6 md:p-8 rounded-3xl border border-white/5 space-y-4">
                 <div className="text-gray-400 leading-relaxed text-base md:text-lg whitespace-pre-wrap">
                   {data.bio || "No bio available."}

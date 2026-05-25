@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { getSettings, updateSettings } from "@/app/actions/settings";
+import { settingsSchema } from "@/lib/validations";
 
 export default function SettingsManagement() {
   const [settings, setSettings] = useState<any>(null);
@@ -27,14 +28,21 @@ export default function SettingsManagement() {
     setUpdating(true);
     const formData = new FormData(e.currentTarget);
     const data = {
-      siteTitle: formData.get("siteTitle"),
-      logoUrl: formData.get("logoUrl"),
-      accentColor: formData.get("accentColor"),
-      heroHeading: formData.get("heroHeading"),
-      heroSubheading: formData.get("heroSubheading"),
+      siteTitle: String(formData.get("siteTitle") || ""),
+      logoUrl: String(formData.get("logoUrl") || ""),
+      accentColor: String(formData.get("accentColor") || ""),
+      heroHeading: String(formData.get("heroHeading") || ""),
+      heroSubheading: String(formData.get("heroSubheading") || ""),
     };
 
-    const res = await updateSettings(data);
+    const parsed = settingsSchema.safeParse(data);
+    if (!parsed.success) {
+      setUpdating(false);
+      toast.error(parsed.error.issues[0]?.message || "Invalid settings");
+      return;
+    }
+
+    const res = await updateSettings(parsed.data);
     setUpdating(false);
     if (res.success) {
       toast.success("Settings updated successfully!");
@@ -54,7 +62,7 @@ export default function SettingsManagement() {
 
       <form onSubmit={handleSubmit} className="space-y-8">
         {/* Branding */}
-        <div className="glass-dark p-8 rounded-none border border-white/5 space-y-6">
+        <div className="glass-dark p-8 rounded-2xl border border-white/5 space-y-6">
           <h3 className="text-xl font-bold flex items-center gap-2 border-b border-white/5 pb-4 uppercase tracking-tighter">
             <Globe className="w-5 h-5 text-primary" />
             General Branding
@@ -62,17 +70,17 @@ export default function SettingsManagement() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Site Title</Label>
-              <Input name="siteTitle" defaultValue={settings?.siteTitle || ""} className="glass border-white/10 h-11 rounded-none border-x-0 border-t-0 border-b focus:ring-0 focus:border-primary transition-all text-sm" />
+              <Input name="siteTitle" defaultValue={settings?.siteTitle || ""} className="glass border-white/10 rounded-md" />
             </div>
             <div className="space-y-2">
               <Label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Logo URL (Cloudinary)</Label>
-              <Input name="logoUrl" defaultValue={settings?.logoUrl || ""} className="glass border-white/10 h-11 rounded-none border-x-0 border-t-0 border-b focus:ring-0 focus:border-primary transition-all text-sm" />
+              <Input name="logoUrl" defaultValue={settings?.logoUrl || ""} className="glass border-white/10 rounded-md" />
             </div>
           </div>
         </div>
 
         {/* Hero Content */}
-        <div className="glass-dark p-8 rounded-none border border-white/5 space-y-6">
+        <div className="glass-dark p-8 rounded-2xl border border-white/5 space-y-6">
           <h3 className="text-xl font-bold flex items-center gap-2 border-b border-white/5 pb-4 uppercase tracking-tighter">
             <Layout className="w-5 h-5 text-primary" />
             Hero Section Content
@@ -80,17 +88,17 @@ export default function SettingsManagement() {
           <div className="space-y-4">
             <div className="space-y-2">
               <Label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Hero Heading</Label>
-              <Input name="heroHeading" defaultValue={settings?.heroHeading || ""} className="glass border-white/10 h-11 rounded-none border-x-0 border-t-0 border-b focus:ring-0 focus:border-primary transition-all text-sm" />
+              <Input name="heroHeading" defaultValue={settings?.heroHeading || ""} className="glass border-white/10 rounded-md" />
             </div>
             <div className="space-y-2">
               <Label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Hero Subheading</Label>
-              <Input name="heroSubheading" defaultValue={settings?.heroSubheading || ""} className="glass border-white/10 h-11 rounded-none border-x-0 border-t-0 border-b focus:ring-0 focus:border-primary transition-all text-sm" />
+              <Input name="heroSubheading" defaultValue={settings?.heroSubheading || ""} className="glass border-white/10 rounded-md" />
             </div>
           </div>
         </div>
 
         {/* Theme */}
-        <div className="glass-dark p-8 rounded-none border border-white/5 space-y-6">
+        <div className="glass-dark p-8 rounded-2xl border border-white/5 space-y-6">
           <h3 className="text-xl font-bold flex items-center gap-2 border-b border-white/5 pb-4 uppercase tracking-tighter">
             <Palette className="w-5 h-5 text-primary" />
             Theme Customization
@@ -99,9 +107,9 @@ export default function SettingsManagement() {
             <div className="space-y-2">
               <Label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Primary Accent Color (Hex)</Label>
               <div className="flex gap-4">
-                <Input name="accentColor" defaultValue={settings?.accentColor || ""} className="glass border-white/10 h-11 rounded-none border-x-0 border-t-0 border-b focus:ring-0 focus:border-primary transition-all text-sm flex-1" />
+                <Input name="accentColor" defaultValue={settings?.accentColor || ""} className="glass border-white/10 rounded-md flex-1" />
                 <div 
-                  className="w-11 h-11 rounded-none border border-white/10" 
+                  className="w-11 h-11 rounded-md border border-white/10" 
                   style={{ backgroundColor: settings?.accentColor || "#F97316" }} 
                 />
               </div>
@@ -111,7 +119,7 @@ export default function SettingsManagement() {
         </div>
 
         <div className="flex justify-end">
-          <Button type="submit" disabled={updating} className="h-14 px-12 bg-primary hover:bg-primary/90 text-white font-bold text-lg rounded-none orange-glow gap-2 uppercase tracking-widest">
+          <Button type="submit" disabled={updating} className="h-14 px-12 bg-primary hover:bg-primary/90 text-white font-bold text-lg rounded-md orange-glow gap-2 uppercase tracking-widest">
             {updating ? <Loader2 className="w-6 h-6 animate-spin" /> : <Save className="w-6 h-6" />}
             Apply System Settings
           </Button>

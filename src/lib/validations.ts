@@ -1,19 +1,43 @@
 import * as z from "zod";
 
 export const contactSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Invalid email address"),
-  message: z.string().min(10, "Message must be at least 10 characters"),
+  name: z
+    .string()
+    .trim()
+    .min(2, "Name must be at least 2 characters")
+    .max(60, "Name is too long")
+    .regex(/^[\p{L}][\p{L}\p{M}'’.\- ]+$/u, "Name contains invalid characters"),
+  email: z.string().trim().toLowerCase().email("Invalid email address").max(254, "Email is too long"),
+  message: z
+    .string()
+    .trim()
+    .min(20, "Message must be at least 20 characters")
+    .max(2000, "Message is too long")
+    .refine((value) => !/<script\b/i.test(value), "Message contains invalid content"),
+  website: z.string().optional().refine((value) => !value || value.trim() === "", "Spam detected"),
 });
 
 export const projectSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters"),
   description: z.string().min(10, "Description must be at least 10 characters"),
   detailedDescription: z.string().optional(),
-  techStack: z.array(z.string()).min(1, "At least one technology is required"),
+  techStack: z.preprocess((value) => {
+    if (typeof value === "string") {
+      return value
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+    }
+    return value;
+  }, z.array(z.string()).min(1, "At least one technology is required")),
   imageUrl: z.string().url("Invalid image URL"),
   githubUrl: z.string().url("Invalid GitHub URL").optional().or(z.literal("")),
   liveDemoUrl: z.string().url("Invalid live demo URL").optional().or(z.literal("")),
+});
+
+export const adminLoginSchema = z.object({
+  username: z.string().trim().min(2, "Username must be at least 2 characters").max(64, "Username is too long"),
+  password: z.string().min(8, "Password must be at least 8 characters").max(128, "Password is too long"),
 });
 
 export const profileSchema = z.object({

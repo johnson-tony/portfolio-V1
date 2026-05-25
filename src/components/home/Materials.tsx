@@ -43,16 +43,16 @@ export default function Materials({ initialMaterials }: MaterialsProps) {
   };
 
   return (
-    <section id="materials" className="py-24 px-6 relative">
+    <section id="materials" className="pt-20 pb-10 px-6 relative">
       <div className="max-w-7xl mx-auto">
-        <div className="space-y-4 mb-12">
-          <h2 className="text-3xl md:text-5xl font-bold tracking-tight">Resource Library</h2>
+        <div className="space-y-4 mb-10 md:mb-12">
+          <h2 className="text-3xl md:text-5xl font-bold tracking-tighter text-gradient">Resource Library</h2>
           <p className="text-gray-400 text-sm md:text-base max-w-xl leading-relaxed">
             Explore my collection of technical guides, design resources, and development roadmaps.
           </p>
         </div>
 
-        <div className="flex flex-col lg:flex-row lg:items-end gap-6 mb-12">
+        <div className="flex flex-col lg:flex-row lg:items-end gap-6 mb-10 md:mb-12">
           {/* Search Box */}
           <div className="relative flex-1 max-w-2xl">
             <Label className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2 block ml-1">Search Resources</Label>
@@ -60,7 +60,7 @@ export default function Materials({ initialMaterials }: MaterialsProps) {
               <Search className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-500 w-4 h-4" />
               <Input 
                 placeholder="Type to filter..." 
-                className="h-10 pl-8 bg-transparent border-white/10 rounded-none border-x-0 border-t-0 border-b focus:border-primary focus:ring-0 transition-all text-sm md:text-base placeholder:text-gray-800"
+                className="pl-8 bg-transparent border-white/10 hover:border-primary/40 hover:ring-2 hover:ring-primary/15 focus:border-primary/60 placeholder:text-gray-500"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -74,9 +74,9 @@ export default function Materials({ initialMaterials }: MaterialsProps) {
                 key={cat}
                 variant={activeCategory === cat ? "default" : "outline"}
                 onClick={() => setActiveCategory(cat as string)}
-                className={`h-9 px-4 rounded-none font-bold transition-all text-[10px] uppercase tracking-widest ${
+                className={`h-9 px-4 rounded-md font-bold transition-all text-[10px] uppercase tracking-widest ${
                   activeCategory === cat 
-                  ? "bg-primary text-white orange-glow" 
+                  ? "bg-primary text-white primary-glow" 
                   : "glass border-white/10 text-gray-400 hover:text-white"
                 }`}
               >
@@ -100,13 +100,13 @@ export default function Materials({ initialMaterials }: MaterialsProps) {
                 whileInView={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 viewport={{ once: true }}
-                className="group glass-dark p-6 rounded-none border border-white/5 hover:border-primary/30 transition-all duration-300 flex flex-col"
+                className="group glass-dark p-6 rounded-2xl border border-white/5 hover:border-primary/30 transition-all duration-300 flex flex-col"
               >
                 <div className="flex items-start justify-between mb-6">
-                  <div className="w-10 h-10 rounded-none bg-primary/10 flex items-center justify-center text-primary">
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                     <FileText className="w-5 h-5" />
                   </div>
-                  <Badge variant="secondary" className="glass border-white/5 rounded-none text-[8px] font-bold uppercase tracking-widest text-primary/70">
+                  <Badge variant="secondary" className="glass border-white/5 rounded-md text-[8px] font-bold uppercase tracking-widest text-primary/70">
                     {item.category}
                   </Badge>
                 </div>
@@ -118,7 +118,7 @@ export default function Materials({ initialMaterials }: MaterialsProps) {
                 <div className="flex gap-3">
                   <Button 
                     onClick={() => setViewingPdf(item)}
-                    className="w-full h-10 bg-white text-black hover:bg-white/90 rounded-none text-[10px] font-bold uppercase tracking-widest gap-2"
+                    className="w-full h-10 bg-white text-black hover:bg-white/90 rounded-md text-[10px] font-bold uppercase tracking-widest gap-2"
                   >
                     <Eye className="w-3.5 h-3.5" /> View Resource
                   </Button>
@@ -129,7 +129,7 @@ export default function Materials({ initialMaterials }: MaterialsProps) {
         </motion.div>
 
         {filteredMaterials.length === 0 && (
-          <div className="text-center py-16 text-gray-500 glass-dark rounded-none border border-white/5 text-sm uppercase tracking-widest">
+          <div className="text-center py-16 text-gray-500 glass-dark rounded-2xl border border-white/5 text-sm uppercase tracking-widest">
             No resources found
           </div>
         )}
@@ -137,7 +137,7 @@ export default function Materials({ initialMaterials }: MaterialsProps) {
 
       {/* PDF Viewer Modal */}
       <Dialog open={!!viewingPdf} onOpenChange={() => setViewingPdf(null)}>
-        <DialogContent className="max-w-6xl h-[90vh] glass-dark border-white/10 p-0 overflow-hidden flex flex-col rounded-none shadow-2xl">
+        <DialogContent className="max-w-6xl h-[90vh] glass-dark border-white/10 p-0 overflow-hidden flex flex-col rounded-2xl shadow-2xl">
           <DialogHeader className="p-6 border-b border-white/5 flex flex-row items-center justify-between">
             <div>
               <DialogTitle className="text-xl font-bold text-white uppercase tracking-tighter">{viewingPdf?.title}</DialogTitle>
@@ -147,7 +147,7 @@ export default function Materials({ initialMaterials }: MaterialsProps) {
                 href={getSecureUrl(viewingPdf?.fileUrl)} 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className={cn(buttonVariants({ size: "sm" }), "bg-primary hover:bg-primary/90 text-white font-bold gap-2 rounded-none h-10 px-6 uppercase tracking-widest text-[10px]")}
+                className={cn(buttonVariants({ size: "sm" }), "bg-primary hover:bg-primary/90 text-white font-bold gap-2 rounded-md h-10 px-6 uppercase tracking-widest text-[10px]")}
               >
                 <Download className="w-4 h-4" /> Download
               </a>

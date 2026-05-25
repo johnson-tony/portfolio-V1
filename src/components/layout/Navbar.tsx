@@ -4,10 +4,11 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
-import { Menu } from "lucide-react";
+import { Menu, Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
+import { useTheme } from "next-themes";
 
 const navLinks = [
   { name: "Hero", href: "/#hero" },
@@ -21,6 +22,9 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const { theme, resolvedTheme, setTheme } = useTheme();
+  const effectiveTheme = resolvedTheme ?? theme;
+  const isDark = effectiveTheme === "dark";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -67,7 +71,7 @@ export default function Navbar() {
               href={link.href}
               prefetch={false}
               onClick={(e) => handleNavClick(e, link.href)}
-              className="relative group text-sm font-medium text-gray-400 hover:text-white transition-colors"
+              className="relative group text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
             >
               {link.name}
               <motion.span
@@ -76,6 +80,16 @@ export default function Navbar() {
               />
             </Link>
           ))}
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            aria-label="Toggle theme"
+            className="text-foreground hover:bg-foreground/10"
+            onClick={() => setTheme(isDark ? "light" : "dark")}
+          >
+            {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          </Button>
         </div>
 
         {/* Mobile Toggle */}
@@ -88,6 +102,22 @@ export default function Navbar() {
               <SheetTitle className="text-white sr-only">Navigation Menu</SheetTitle>
               <div className="flex flex-col items-center gap-8 mt-4">
                 <div className="w-12 h-1.5 bg-white/10 rounded-full mb-4" /> {/* Handle bar */}
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="w-full justify-center glass border-white/10 rounded-2xl"
+                  onClick={() => setTheme(isDark ? "light" : "dark")}
+                >
+                  {isDark ? (
+                    <>
+                      <Sun className="w-4 h-4 mr-2" /> Light mode
+                    </>
+                  ) : (
+                    <>
+                      <Moon className="w-4 h-4 mr-2" /> Dark mode
+                    </>
+                  )}
+                </Button>
                 {navLinks.map((link) => (
                   <Link
                     key={link.name}
