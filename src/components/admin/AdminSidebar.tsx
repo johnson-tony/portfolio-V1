@@ -34,17 +34,22 @@ const menuItems = [
   { name: "Settings", href: "/admin/dashboard/settings", icon: Settings },
 ];
 
-export default function AdminSidebar() {
-  const pathname = usePathname();
-  const [open, setOpen] = useState(false);
-
-  const NavContent = ({ mobile = false }: { mobile?: boolean }) => (
+function AdminNavContent({
+  pathname,
+  mobile = false,
+  onNavigate,
+}: {
+  pathname: string | null;
+  mobile?: boolean;
+  onNavigate?: () => void;
+}) {
+  return (
     <div className="flex flex-col h-full bg-[#0A0A0B]">
       <div className="p-8">
-        <Link 
-          href="/" 
+        <Link
+          href="/"
           className="text-2xl font-bold tracking-tighter flex items-center gap-2"
-          onClick={() => mobile && setOpen(false)}
+          onClick={() => (mobile ? onNavigate?.() : undefined)}
         >
           <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white">
             P
@@ -60,16 +65,21 @@ export default function AdminSidebar() {
             <Link
               key={item.name}
               href={item.href}
-              onClick={() => mobile && setOpen(false)}
+              onClick={() => (mobile ? onNavigate?.() : undefined)}
               className={cn(
                 "flex items-center justify-between px-4 py-3 rounded-xl transition-all group",
-                isActive 
-                  ? "bg-primary/10 text-primary border border-primary/20" 
-                  : "text-gray-500 hover:text-white hover:bg-white/5"
+                isActive
+                  ? "bg-primary/10 text-primary border border-primary/20"
+                  : "text-gray-500 hover:text-white hover:bg-white/5",
               )}
             >
               <div className="flex items-center gap-3">
-                <item.icon className={cn("w-5 h-5", isActive ? "text-primary" : "text-gray-500 group-hover:text-white")} />
+                <item.icon
+                  className={cn(
+                    "w-5 h-5",
+                    isActive ? "text-primary" : "text-gray-500 group-hover:text-white",
+                  )}
+                />
                 <span className="font-medium">{item.name}</span>
               </div>
               {isActive && <ChevronRight className="w-4 h-4" />}
@@ -89,6 +99,11 @@ export default function AdminSidebar() {
       </div>
     </div>
   );
+}
+
+export default function AdminSidebar() {
+  const pathname = usePathname();
+  const [open, setOpen] = useState(false);
 
   return (
     <>
@@ -106,14 +121,14 @@ export default function AdminSidebar() {
             <SheetHeader className="sr-only">
               <SheetTitle>Admin Navigation</SheetTitle>
             </SheetHeader>
-            <NavContent mobile />
+            <AdminNavContent pathname={pathname} mobile onNavigate={() => setOpen(false)} />
           </SheetContent>
         </Sheet>
       </div>
 
       {/* Desktop Sidebar */}
       <aside className="hidden lg:flex w-64 h-screen fixed left-0 top-0 bg-[#0A0A0B] border-r border-white/5 flex-col z-50">
-        <NavContent />
+        <AdminNavContent pathname={pathname} />
       </aside>
     </>
   );

@@ -1,25 +1,34 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Mail, Trash2, Loader2, CheckCircle, Clock, Reply } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { getMessages, markAsRead, deleteMessage } from "@/app/actions/messages";
 
+type Message = {
+  _id: string;
+  name: string;
+  email: string;
+  content: string;
+  isRead: boolean;
+  createdAt: string | Date;
+};
+
 export default function MessagesManagement() {
-  const [messages, setMessages] = useState<any[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    loadMessages();
-  }, []);
-
-  const loadMessages = async () => {
+  const loadMessages = useCallback(async () => {
     setLoading(true);
     const data = await getMessages();
     setMessages(data);
     setLoading(false);
-  };
+  }, []);
+
+  useEffect(() => {
+    void loadMessages();
+  }, [loadMessages]);
 
   const handleMarkRead = async (id: string) => {
     const res = await markAsRead(id);

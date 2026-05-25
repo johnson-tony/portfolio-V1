@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
@@ -12,6 +12,25 @@ interface HeroProps {
 }
 
 export default function Hero({ heading, subheading }: HeroProps) {
+  const particles = useMemo(() => {
+    const rand = (seed: number) => {
+      const x = Math.sin(seed) * 10000;
+      return x - Math.floor(x);
+    };
+
+    return Array.from({ length: 6 }, (_, i) => {
+      const base = 1337 + i * 97;
+      const left = `${(rand(base + 1) * 100).toFixed(4)}%`;
+      const top = `${(rand(base + 2) * 100).toFixed(4)}%`;
+      const x1 = Math.round(rand(base + 3) * 1000 - 500);
+      const x2 = Math.round(rand(base + 4) * 1000 - 500);
+      const y1 = Math.round(rand(base + 5) * 800 - 400);
+      const y2 = Math.round(rand(base + 6) * 800 - 400);
+      const duration = Number((10 + rand(base + 7) * 10).toFixed(2));
+      return { left, top, x1, x2, y1, y2, duration };
+    });
+  }, []);
+
   return (
     <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden px-6 pt-20">
       {/* Background Grid with subtle movement */}
@@ -27,24 +46,24 @@ export default function Hero({ heading, subheading }: HeroProps) {
       />
       
       {/* Dynamic Animated Particles */}
-      {[...Array(6)].map((_, i) => (
+      {particles.map((p, i) => (
         <motion.div
           key={i}
           className="absolute w-2 h-2 rounded-full bg-primary/40 blur-sm z-0"
           animate={{
-            x: [Math.random() * 1000 - 500, Math.random() * 1000 - 500],
-            y: [Math.random() * 800 - 400, Math.random() * 800 - 400],
+            x: [p.x1, p.x2],
+            y: [p.y1, p.y2],
             opacity: [0.2, 0.6, 0.2],
             scale: [1, 1.5, 1],
           }}
           transition={{
-            duration: 10 + Math.random() * 10,
+            duration: p.duration,
             repeat: Infinity,
             ease: "linear",
           }}
           style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
+            left: p.left,
+            top: p.top,
           }}
         />
       ))}
@@ -99,7 +118,7 @@ export default function Hero({ heading, subheading }: HeroProps) {
               visible: { opacity: 1, y: 0 }
             }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="text-5xl md:text-8xl font-extrabold tracking-tighter mb-8 text-gradient leading-[1.05] animate-float"
+            className="text-5xl md:text-8xl font-extrabold tracking-tighter mb-2 text-gradient leading-[1.05] animate-float"
           >
             {heading || "Building the Future of SaaS Experiences"}
           </motion.h1>

@@ -15,18 +15,26 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
+type Material = {
+  _id: string;
+  title: string;
+  category?: string | null;
+  fileUrl?: string | null;
+  thumbnailUrl?: string | null;
+};
+
 interface MaterialsProps {
-  initialMaterials: any[];
+  initialMaterials: Material[];
 }
 
 export default function Materials({ initialMaterials }: MaterialsProps) {
-  if (!initialMaterials || initialMaterials.length === 0) return null;
-
   const [searchTerm, setSearchTerm] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
-  const [viewingPdf, setViewingPdf] = useState<any | null>(null);
+  const [viewingPdf, setViewingPdf] = useState<Material | null>(null);
 
-  const materials = initialMaterials;
+  if (!initialMaterials || initialMaterials.length === 0) return null;
+
+  const materials: Material[] = initialMaterials;
 
   // Dynamically extract categories from data
   const dynamicCategories = ["All", ...Array.from(new Set(materials.map(m => m.category).filter(Boolean)))];
@@ -37,7 +45,7 @@ export default function Materials({ initialMaterials }: MaterialsProps) {
     return matchesSearch && matchesCategory;
   });
 
-  const getSecureUrl = (url: string) => {
+  const getSecureUrl = (url?: string | null) => {
     if (!url) return "";
     return url.replace(/^http:\/\//i, "https://");
   };
@@ -154,7 +162,7 @@ export default function Materials({ initialMaterials }: MaterialsProps) {
             </div>
           </DialogHeader>
           <div className="flex-1 bg-[#121214] relative flex flex-col">
-            {viewingPdf?.fileUrl && (
+            {viewingPdf?.fileUrl ? (
               <>
                 <div className="bg-primary/5 p-3 flex justify-center border-b border-white/5">
                   <a 
@@ -172,7 +180,7 @@ export default function Materials({ initialMaterials }: MaterialsProps) {
                   title={viewingPdf.title}
                 />
               </>
-            )}
+            ) : null}
           </div>
         </DialogContent>
       </Dialog>

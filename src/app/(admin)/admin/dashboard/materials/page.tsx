@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Plus, Trash2, Loader2, Save, FileText, Search, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,25 +11,33 @@ import { getMaterials, addMaterial, updateMaterial, deleteMaterial } from "@/app
 import FileUpload from "@/components/admin/FileUpload";
 import { materialSchema } from "@/lib/validations";
 
+type Material = {
+  _id: string;
+  title: string;
+  category: string;
+  fileUrl: string;
+  thumbnailUrl?: string | null;
+};
+
 export default function MaterialsManagement() {
-  const [materials, setMaterials] = useState<any[]>([]);
+  const [materials, setMaterials] = useState<Material[]>([]);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
-  const [editingMaterial, setEditingMaterial] = useState<any | null>(null);
+  const [editingMaterial, setEditingMaterial] = useState<Material | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [fileUrl, setFileUrl] = useState("");
 
-  useEffect(() => {
-    loadMaterials();
-  }, []);
-
-  const loadMaterials = async () => {
+  const loadMaterials = useCallback(async () => {
     setLoading(true);
     const data = await getMaterials();
     setMaterials(data);
     setLoading(false);
-  };
+  }, []);
+
+  useEffect(() => {
+    void loadMaterials();
+  }, [loadMaterials]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -79,7 +87,7 @@ export default function MaterialsManagement() {
     }
   };
 
-  const openModal = (material: any = null) => {
+  const openModal = (material: Material | null = null) => {
     setEditingMaterial(material);
     setFileUrl(material?.fileUrl || "");
     setModalOpen(true);
