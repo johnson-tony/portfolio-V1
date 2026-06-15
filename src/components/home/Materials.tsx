@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FileText, Search, Download, Eye } from "lucide-react";
+import { FileText, Search, Download, Eye, ChevronRight } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
@@ -36,7 +36,6 @@ export default function Materials({ initialMaterials }: MaterialsProps) {
 
   const materials: Material[] = initialMaterials;
 
-  // Dynamically extract categories from data
   const dynamicCategories = ["All", ...Array.from(new Set(materials.map(m => m.category).filter(Boolean)))];
 
   const filteredMaterials = materials.filter(item => {
@@ -51,42 +50,45 @@ export default function Materials({ initialMaterials }: MaterialsProps) {
   };
 
   return (
-    <section id="materials" className="pt-20 pb-10 px-6 relative">
+    <section id="materials" className="section-padding px-6 relative">
       <div className="max-w-7xl mx-auto">
-        <div className="space-y-4 mb-10 md:mb-12">
-          <h2 className="text-3xl md:text-5xl font-bold tracking-tighter text-gradient">Resource Library</h2>
-          <p className="text-gray-400 text-sm md:text-base max-w-xl leading-relaxed">
-            Explore my collection of technical guides, design resources, and development roadmaps.
-          </p>
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="space-y-3"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">Resource Library</h2>
+            <p className="text-muted-foreground text-sm md:text-base max-w-xl leading-relaxed">
+              Explore my collection of technical guides, design resources, and development roadmaps.
+            </p>
+          </motion.div>
         </div>
 
-        <div className="flex flex-col lg:flex-row lg:items-end gap-6 mb-10 md:mb-12">
-          {/* Search Box */}
-          <div className="relative flex-1 max-w-2xl">
-            <Label className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2 block ml-1">Search Resources</Label>
-            <div className="relative">
-              <Search className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-500 w-4 h-4" />
-              <Input 
-                placeholder="Type to filter..." 
-                className="pl-8 bg-transparent border-white/10 hover:border-primary/40 hover:ring-2 hover:ring-primary/15 focus:border-primary/60 placeholder:text-gray-500"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-10">
+          <div className="relative w-full lg:max-w-md">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
+            <Input 
+              placeholder="Search resources..." 
+              className="pl-10 h-11 bg-muted/50 border-border focus:ring-primary/20"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
           </div>
           
-          {/* Dynamic Category Filters */}
-          <div className="flex flex-wrap gap-2 lg:pb-1">
+          <div className="flex flex-wrap gap-2">
             {dynamicCategories.map(cat => (
               <Button
                 key={cat}
                 variant={activeCategory === cat ? "default" : "outline"}
                 onClick={() => setActiveCategory(cat as string)}
-                className={`h-9 px-4 rounded-md font-bold transition-all text-[10px] uppercase tracking-widest ${
+                className={cn(
+                  "h-9 px-4 rounded-full text-xs font-semibold transition-all",
                   activeCategory === cat 
-                  ? "bg-primary text-white primary-glow" 
-                  : "glass border-white/10 text-gray-400 hover:text-white"
-                }`}
+                    ? "bg-primary text-white primary-glow" 
+                    : "bg-muted/50 border-border text-muted-foreground hover:bg-muted"
+                )}
               >
                 {cat}
               </Button>
@@ -94,84 +96,83 @@ export default function Materials({ initialMaterials }: MaterialsProps) {
           </div>
         </div>
 
-        {/* Resources Grid */}
         <motion.div 
           layout
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           <AnimatePresence mode="popLayout">
-            {filteredMaterials.map((item) => (
+            {filteredMaterials.map((item, index) => (
               <motion.div
                 key={item._id}
                 layout
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ delay: index * 0.05 }}
                 viewport={{ once: true }}
-                className="group glass-dark p-6 rounded-2xl border border-white/5 hover:border-primary/30 transition-all duration-300 flex flex-col"
+                className="card-premium p-6 group flex flex-col h-full"
               >
                 <div className="flex items-start justify-between mb-6">
-                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-                    <FileText className="w-5 h-5" />
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300 shadow-sm">
+                    <FileText className="w-6 h-6" />
                   </div>
-                  <Badge variant="secondary" className="glass border-white/5 rounded-md text-[8px] font-bold uppercase tracking-widest text-primary/70">
+                  <Badge variant="secondary" className="bg-muted text-muted-foreground rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider">
                     {item.category}
                   </Badge>
                 </div>
                 
-                <h3 className="text-base md:text-lg font-bold mb-4 group-hover:text-primary transition-colors line-clamp-2 min-h-[3rem] flex-1 leading-tight">
+                <h3 className="text-lg font-bold mb-6 group-hover:text-primary transition-colors line-clamp-2 flex-1 leading-tight">
                   {item.title}
                 </h3>
                 
-                <div className="flex gap-3">
-                  <Button 
-                    onClick={() => setViewingPdf(item)}
-                    className="w-full h-10 bg-white text-black hover:bg-white/90 rounded-md text-[10px] font-bold uppercase tracking-widest gap-2"
-                  >
-                    <Eye className="w-3.5 h-3.5" /> View Resource
-                  </Button>
-                </div>
+                <Button 
+                  onClick={() => setViewingPdf(item)}
+                  variant="outline"
+                  className="w-full h-11 rounded-lg font-semibold gap-2 group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all duration-300"
+                >
+                  <Eye className="w-4 h-4" /> View Resource
+                </Button>
               </motion.div>
             ))}
           </AnimatePresence>
         </motion.div>
 
         {filteredMaterials.length === 0 && (
-          <div className="text-center py-16 text-gray-500 glass-dark rounded-2xl border border-white/5 text-sm uppercase tracking-widest">
-            No resources found
+          <div className="text-center py-20 bg-muted/30 rounded-2xl border border-dashed border-border text-muted-foreground font-medium">
+            No resources found matching your criteria
           </div>
         )}
       </div>
 
-      {/* PDF Viewer Modal */}
       <Dialog open={!!viewingPdf} onOpenChange={() => setViewingPdf(null)}>
-        <DialogContent className="max-w-6xl h-[90vh] glass-dark border-white/10 p-0 overflow-hidden flex flex-col rounded-2xl shadow-2xl">
-          <DialogHeader className="p-6 border-b border-white/5 flex flex-row items-center justify-between">
-            <div>
-              <DialogTitle className="text-xl font-bold text-white uppercase tracking-tighter">{viewingPdf?.title}</DialogTitle>
-            </div>
-            <div className="flex items-center gap-4">
+        <DialogContent className="max-w-5xl w-[95vw] h-[85vh] p-0 overflow-hidden flex flex-col rounded-2xl border-border bg-background shadow-2xl">
+          <DialogHeader className="p-4 md:p-6 border-b border-border flex flex-row items-center justify-between">
+            <DialogTitle className="text-xl font-bold text-foreground truncate max-w-[60%]">{viewingPdf?.title}</DialogTitle>
+            <div className="flex items-center gap-3 pr-8">
               <a 
                 href={getSecureUrl(viewingPdf?.fileUrl)} 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className={cn(buttonVariants({ size: "sm" }), "bg-primary hover:bg-primary/90 text-white font-bold gap-2 rounded-md h-10 px-6 uppercase tracking-widest text-[10px]")}
+                className={cn(
+                  buttonVariants({ size: "sm" }), 
+                  "bg-primary hover:bg-primary/90 text-white font-bold gap-2 rounded-full h-10 px-6 shadow-md transition-all active:scale-95"
+                )}
               >
                 <Download className="w-4 h-4" /> Download
               </a>
             </div>
           </DialogHeader>
-          <div className="flex-1 bg-[#121214] relative flex flex-col">
+          <div className="flex-1 bg-muted/20 relative flex flex-col">
             {viewingPdf?.fileUrl ? (
               <>
-                <div className="bg-primary/5 p-3 flex justify-center border-b border-white/5">
+                <div className="bg-primary/5 p-3 flex justify-center border-b border-border/50">
                   <a 
                     href={getSecureUrl(viewingPdf.fileUrl)} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="text-primary text-[10px] font-bold uppercase tracking-widest hover:underline flex items-center gap-2"
+                    className="text-primary text-xs font-bold hover:underline flex items-center gap-2"
                   >
-                    <Eye className="w-3 h-3" /> PDF not loading? Click here to open in a new tab
+                    <Eye className="w-3.5 h-3.5" /> PDF not loading? Click here to open in a new tab
                   </a>
                 </div>
                 <iframe 

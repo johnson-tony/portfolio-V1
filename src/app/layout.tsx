@@ -61,11 +61,30 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const settings = await getSettings();
-  const accentColor = settings?.accentColor; // Only override if explicitly set in DB
+  const accentColor = settings?.accentColor;
   const accentHsl = accentColor ? hexToHslTuple(accentColor) : null;
 
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
+      <head>
+        {/* Manual Theme Blocking Script to prevent FOUC in React 19 */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var theme = localStorage.getItem('portfolio-theme') || 'dark';
+                  if (theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                  } else {
+                    document.documentElement.classList.remove('dark');
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body 
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
         suppressHydrationWarning
@@ -78,7 +97,10 @@ export default async function RootLayout({
             : {}),
         } as React.CSSProperties}
       >
-        <ThemeProvider>
+        <ThemeProvider
+          defaultTheme="dark"
+          storageKey="portfolio-theme"
+        >
           <NextAuthProvider>
             {children}
             <Toaster richColors position="top-center" />

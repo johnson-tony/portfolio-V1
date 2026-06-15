@@ -3,6 +3,7 @@ import Profile from "@/components/home/Profile";
 import Projects from "@/components/home/Projects";
 import Materials from "@/components/home/Materials";
 import Contact from "@/components/home/Contact";
+import Stats from "@/components/home/Stats";
 import PageWrapper from "@/components/layout/PageWrapper";
 import { getProjects } from "@/app/actions/projects";
 import { getSettings } from "@/app/actions/settings";
@@ -23,6 +24,7 @@ export default async function Home() {
         heading={settings?.heroHeading} 
         subheading={settings?.heroSubheading} 
       />
+      <Stats />
       <Profile data={profile} />
       <Projects initialProjects={projects} />
       <Materials initialMaterials={materials} />

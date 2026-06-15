@@ -3,12 +3,11 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion } from "framer-motion";
-import { Menu, Moon, Sun } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, Moon, Sun, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import { useTheme } from "next-themes";
+import { useTheme } from "@/components/providers/ThemeProvider";
 
 const navLinks = [
   { name: "Hero", href: "/#hero" },
@@ -40,7 +39,16 @@ export default function Navbar() {
       const targetId = href.replace("/#", "#");
       const element = document.querySelector(targetId);
       if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
+        const offset = 80;
+        const bodyRect = document.body.getBoundingClientRect().top;
+        const elementRect = element.getBoundingClientRect().top;
+        const elementPosition = elementRect - bodyRect;
+        const offsetPosition = elementPosition - offset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth"
+        });
       }
     }
     setIsOpen(false);
@@ -49,43 +57,39 @@ export default function Navbar() {
   return (
     <nav
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-6 py-4",
-        scrolled ? "glass-dark py-3" : "bg-transparent"
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-6",
+        scrolled ? "py-3 glass shadow-sm" : "py-5 bg-transparent"
       )}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <Link href="/" className="text-2xl font-bold tracking-tighter flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-primary orange-glow flex items-center justify-center text-white">
+        <Link href="/" className="flex items-center gap-2 group">
+          <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white font-bold text-xl primary-glow shadow-sm group-hover:scale-105 transition-transform">
             P
           </div>
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
+          <span className="text-xl font-bold tracking-tight text-foreground">
             Portfolio
           </span>
         </Link>
 
         {/* Desktop Links */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-1">
           {navLinks.map((link) => (
             <Link
               key={link.name}
               href={link.href}
               prefetch={false}
               onClick={(e) => handleNavClick(e, link.href)}
-              className="relative group text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              className="px-4 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-all"
             >
               {link.name}
-              <motion.span
-                className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full"
-                layoutId="nav-underline"
-              />
             </Link>
           ))}
+          <div className="w-px h-6 bg-border mx-2" />
           <Button
             type="button"
             variant="ghost"
             size="icon"
-            aria-label="Toggle theme"
-            className="text-foreground hover:bg-foreground/10"
+            className="rounded-lg"
             onClick={() => setTheme(isDark ? "light" : "dark")}
           >
             {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
@@ -93,47 +97,52 @@ export default function Navbar() {
         </div>
 
         {/* Mobile Toggle */}
-        <div className="md:hidden">
-          <Sheet open={isOpen} onOpenChange={setIsOpen}>
-            <SheetTrigger render={<Button variant="ghost" size="icon" className="text-white hover:bg-white/10" />}>
-              <Menu className="w-6 h-6" />
-            </SheetTrigger>
-            <SheetContent side="bottom" className="glass-dark border-white/10 text-white rounded-t-[2.5rem] p-8 pb-12">
-              <SheetTitle className="text-white sr-only">Navigation Menu</SheetTitle>
-              <div className="flex flex-col items-center gap-8 mt-4">
-                <div className="w-12 h-1.5 bg-white/10 rounded-full mb-4" /> {/* Handle bar */}
-                <Button
-                  type="button"
-                  variant="ghost"
-                  className="w-full justify-center glass border-white/10 rounded-2xl"
-                  onClick={() => setTheme(isDark ? "light" : "dark")}
-                >
-                  {isDark ? (
-                    <>
-                      <Sun className="w-4 h-4 mr-2" /> Light mode
-                    </>
-                  ) : (
-                    <>
-                      <Moon className="w-4 h-4 mr-2" /> Dark mode
-                    </>
-                  )}
-                </Button>
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.name}
-                    href={link.href}
-                    prefetch={false}
-                    onClick={(e) => handleNavClick(e, link.href)}
-                    className="text-md md:text-2xl font-bold tracking-tight hover:text-primary transition-colors"
-                  >
-                    {link.name}
-                  </Link>
-                ))}
-              </div>
-            </SheetContent>
-          </Sheet>
+        <div className="md:hidden flex items-center gap-2">
+           <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="rounded-lg"
+            onClick={() => setTheme(isDark ? "light" : "dark")}
+          >
+            {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="rounded-lg"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </Button>
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="absolute top-full left-0 right-0 p-4 md:hidden"
+          >
+            <div className="glass rounded-2xl border border-border/50 p-4 shadow-xl flex flex-col gap-2">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  prefetch={false}
+                  onClick={(e) => handleNavClick(e, link.href)}
+                  className="px-4 py-3 rounded-xl text-lg font-medium text-muted-foreground hover:text-primary hover:bg-primary/5 transition-all"
+                >
+                  {link.name}
+                </Link>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }

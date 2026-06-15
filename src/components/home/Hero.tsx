@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 interface HeroProps {
@@ -12,82 +12,8 @@ interface HeroProps {
 }
 
 export default function Hero({ heading, subheading }: HeroProps) {
-  const particles = useMemo(() => {
-    const rand = (seed: number) => {
-      const x = Math.sin(seed) * 10000;
-      return x - Math.floor(x);
-    };
-
-    return Array.from({ length: 6 }, (_, i) => {
-      const base = 1337 + i * 97;
-      const left = `${(rand(base + 1) * 100).toFixed(4)}%`;
-      const top = `${(rand(base + 2) * 100).toFixed(4)}%`;
-      const x1 = Math.round(rand(base + 3) * 1000 - 500);
-      const x2 = Math.round(rand(base + 4) * 1000 - 500);
-      const y1 = Math.round(rand(base + 5) * 800 - 400);
-      const y2 = Math.round(rand(base + 6) * 800 - 400);
-      const duration = Number((10 + rand(base + 7) * 10).toFixed(2));
-      return { left, top, x1, x2, y1, y2, duration };
-    });
-  }, []);
-
   return (
-    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden px-6 pt-20">
-      {/* Background Grid with subtle movement */}
-      <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0.15 }}
-        transition={{ duration: 2 }}
-        className="absolute inset-0 z-0" 
-        style={{ 
-          backgroundImage: "linear-gradient(hsl(var(--primary)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary)) 1px, transparent 1px)", 
-          backgroundSize: "60px 60px" 
-        }} 
-      />
-      
-      {/* Dynamic Animated Particles */}
-      {particles.map((p, i) => (
-        <motion.div
-          key={i}
-          className="absolute w-2 h-2 rounded-full bg-primary/40 blur-sm z-0"
-          animate={{
-            x: [p.x1, p.x2],
-            y: [p.y1, p.y2],
-            opacity: [0.2, 0.6, 0.2],
-            scale: [1, 1.5, 1],
-          }}
-          transition={{
-            duration: p.duration,
-            repeat: Infinity,
-            ease: "linear",
-          }}
-          style={{
-            left: p.left,
-            top: p.top,
-          }}
-        />
-      ))}
-
-      {/* Large Floating Blur Circles */}
-      <motion.div 
-        animate={{ 
-          x: [0, 80, 0],
-          y: [0, 40, 0],
-          scale: [1, 1.1, 1],
-        }}
-        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] z-0" 
-      />
-      <motion.div 
-        animate={{ 
-          x: [0, -80, 0],
-          y: [0, -40, 0],
-          scale: [1, 1.2, 1],
-        }}
-        transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[150px] z-0" 
-      />
-
+    <section id="hero" className="relative min-h-[90vh] flex items-center justify-center overflow-hidden px-6 pt-20 hero-glow">
       <div className="relative z-10 max-w-5xl text-center">
         <motion.div
           initial="hidden"
@@ -97,30 +23,35 @@ export default function Hero({ heading, subheading }: HeroProps) {
             visible: {
               opacity: 1,
               transition: {
-                staggerChildren: 0.2,
+                staggerChildren: 0.15,
+                delayChildren: 0.2,
               },
             },
           }}
         >
-          <motion.span 
+          <motion.div 
+            variants={{
+              hidden: { opacity: 0, y: 10 },
+              visible: { opacity: 1, y: 0 }
+            }}
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/20 bg-primary/5 text-primary text-xs font-semibold tracking-wide mb-8 backdrop-blur-sm"
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+            </span>
+            Available for new opportunities
+          </motion.div>
+          
+          <motion.h1 
             variants={{
               hidden: { opacity: 0, y: 20 },
               visible: { opacity: 1, y: 0 }
             }}
-            className="inline-block px-4 py-1.5 rounded-full border border-primary/30 bg-primary/10 text-primary text-xs font-bold tracking-widest uppercase mb-8 primary-glow backdrop-blur-sm"
-          >
-            Available for Projects
-          </motion.span>
-          
-          <motion.h1 
-            variants={{
-              hidden: { opacity: 0, y: 30 },
-              visible: { opacity: 1, y: 0 }
-            }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="text-5xl md:text-8xl font-extrabold tracking-tighter mb-2 text-gradient leading-[1.05] animate-float"
+            className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-foreground leading-[1.1]"
           >
-            {heading || "Building the Future of SaaS Experiences"}
+            {heading || "Crafting Digital Experiences with Precision"}
           </motion.h1>
           
           <motion.p 
@@ -129,42 +60,45 @@ export default function Hero({ heading, subheading }: HeroProps) {
               visible: { opacity: 1, y: 0 }
             }}
             transition={{ duration: 0.8 }}
-            className="text-gray-400 text-lg md:text-2xl max-w-3xl mx-auto mb-12 leading-relaxed font-medium"
+            className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed"
           >
-            {subheading || "A highly polished, performance-driven developer portfolio inspired by the world's best SaaS platforms."}
+            {subheading || "Full Stack Developer specializing in building exceptional digital products that combine beautiful design with robust engineering."}
           </motion.p>
           
           <motion.div 
             variants={{
-              hidden: { opacity: 0, scale: 0.9 },
-              visible: { opacity: 1, scale: 1 }
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0 }
             }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-6"
+            className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
             <Link href="/#projects" prefetch={false}>
               <Button 
                 size="lg" 
-                className="h-14 md:h-16 px-8 md:px-10 bg-primary hover:bg-primary/90 text-white rounded-2xl primary-glow-strong text-lg md:text-xl font-bold group transition-all duration-300 hover:scale-105 active:scale-95"
+                className="h-12 px-8 bg-primary hover:bg-primary/90 text-white rounded-full primary-glow shadow-lg transition-all duration-300 hover:scale-[1.02] active:scale-95 group"
               >
-                View My Work
-                <ArrowRight className="ml-3 w-5 h-5 md:w-6 md:h-6 group-hover:translate-x-1 transition-transform" />
+                Explore Projects
+                <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
             <Link href="/#contact" prefetch={false}>
               <Button 
                 size="lg" 
                 variant="outline" 
-                className="h-14 md:h-16 px-8 md:px-10 glass border-white/10 hover:bg-white/10 text-white rounded-2xl text-lg md:text-xl font-bold transition-all duration-300 hover:scale-105 active:scale-95"
+                className="h-12 px-8 rounded-full border-border hover:bg-muted transition-all duration-300 hover:scale-[1.02] active:scale-95"
               >
-                Get in Touch
+                Let's Talk
               </Button>
             </Link>
           </motion.div>
         </motion.div>
       </div>
 
-      {/* Bottom Ambient Glow */}
-      <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-background via-background/80 to-transparent z-0" />
+      {/* Subtle Background Decoration */}
+      <div className="absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[120px]" />
+        <div className="absolute top-1/4 right-1/4 w-[400px] h-[400px] bg-secondary/5 rounded-full blur-[100px]" />
+      </div>
     </section>
   );
 }

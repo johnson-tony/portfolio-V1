@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { sendContactMessage } from "@/app/actions/contact";
+import { cn } from "@/lib/utils";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -57,22 +58,33 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="pt-20 pb-12 px-6 relative overflow-hidden">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[100px] -z-10" />
-
+    <section id="contact" className="section-padding px-6 relative overflow-hidden">
       <div className="max-w-xl mx-auto">
-        <div className="text-center space-y-3 mb-10 md:mb-12">
-          <h2 className="text-3xl md:text-5xl font-bold tracking-tighter text-gradient">Get in Touch</h2>
-          <p className="text-gray-400 text-sm md:text-base">
-            Drop me a message and I'll get back to you soon.
-          </p>
+        <div className="text-center space-y-3 mb-12">
+          <motion.h2 
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-3xl md:text-4xl font-bold tracking-tight text-foreground"
+          >
+            Get in Touch
+          </motion.h2>
+          <motion.p 
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-muted-foreground text-sm md:text-base"
+          >
+            Have a project in mind? Let's discuss how we can work together.
+          </motion.p>
         </div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="glass-dark p-8 md:p-12 rounded-2xl border border-white/5 relative hover:animate-glow transition-all"
+          className="card-premium p-6 md:p-10 relative"
         >
           {submitted ? (
             <motion.div 
@@ -80,23 +92,23 @@ export default function Contact() {
               animate={{ opacity: 1, scale: 1 }}
               className="text-center py-10 space-y-6"
             >
-              <div className="w-16 h-16 bg-primary/20 rounded-2xl flex items-center justify-center mx-auto text-primary">
+              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto text-primary">
                 <CheckCircle2 className="w-8 h-8" />
               </div>
               <div className="space-y-2">
-                <h3 className="text-2xl font-bold uppercase tracking-tighter">Message Sent</h3>
-                <p className="text-gray-400 text-sm text-balance">Thank you for reaching out. I'll be in touch shortly.</p>
+                <h3 className="text-2xl font-bold tracking-tight">Message Sent</h3>
+                <p className="text-muted-foreground text-sm">Thank you for reaching out. I'll get back to you as soon as possible.</p>
               </div>
               <Button 
-                variant="ghost" 
+                variant="outline" 
                 onClick={() => setSubmitted(false)}
-                className="text-primary hover:text-primary/80 text-xs font-bold uppercase tracking-widest"
+                className="rounded-full px-8"
               >
                 Send Another
               </Button>
             </motion.div>
           ) : (
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <input
                 type="text"
                 tabIndex={-1}
@@ -105,46 +117,55 @@ export default function Contact() {
                 className="hidden"
                 {...register("website")}
               />
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                <div className="space-y-1.5">
-                  <Label htmlFor="name" className="text-[10px] font-bold uppercase tracking-widest text-gray-500 ml-1">Name</Label>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <Label htmlFor="name" className="text-xs font-semibold text-foreground ml-1">Name</Label>
                   <Input 
                     id="name" 
                     {...register("name")}
                     placeholder="Your Name" 
-                    className={`bg-transparent border-white/10 hover:border-primary/40 hover:ring-2 hover:ring-primary/15 focus:border-primary/60 placeholder:text-gray-500 ${errors.name ? 'border-red-500' : ''}`}
+                    className={cn(
+                      "h-11 bg-muted/50 border-border focus:ring-primary/20",
+                      errors.name && "border-destructive focus:ring-destructive/20"
+                    )}
                   />
-                  {errors.name && <p className="text-red-500 text-[10px] mt-1 ml-1">{errors.name.message}</p>}
+                  {errors.name && <p className="text-destructive text-xs mt-1 ml-1">{errors.name.message}</p>}
                 </div>
                 
-                <div className="space-y-1.5">
-                  <Label htmlFor="email" className="text-[10px] font-bold uppercase tracking-widest text-gray-500 ml-1">Email</Label>
+                <div className="space-y-2">
+                  <Label htmlFor="email" className="text-xs font-semibold text-foreground ml-1">Email</Label>
                   <Input 
                     id="email" 
                     type="email" 
                     {...register("email")}
                     placeholder="you@example.com" 
-                    className={`bg-transparent border-white/10 hover:border-primary/40 hover:ring-2 hover:ring-primary/15 focus:border-primary/60 placeholder:text-gray-500 ${errors.email ? 'border-red-500' : ''}`}
+                    className={cn(
+                      "h-11 bg-muted/50 border-border focus:ring-primary/20",
+                      errors.email && "border-destructive focus:ring-destructive/20"
+                    )}
                   />
-                  {errors.email && <p className="text-red-500 text-[10px] mt-1 ml-1">{errors.email.message}</p>}
+                  {errors.email && <p className="text-destructive text-xs mt-1 ml-1">{errors.email.message}</p>}
                 </div>
               </div>
 
-              <div className="space-y-1.5">
-                <Label htmlFor="message" className="text-[10px] font-bold uppercase tracking-widest text-gray-500 ml-1">Message</Label>
+              <div className="space-y-2">
+                <Label htmlFor="message" className="text-xs font-semibold text-foreground ml-1">Message</Label>
                 <Textarea 
                   id="message" 
                   {...register("message")}
-                  placeholder="How can I help?" 
-                  className={`min-h-[100px] bg-transparent border-white/10 hover:border-primary/40 hover:ring-2 hover:ring-primary/15 focus:border-primary/60 resize-none placeholder:text-gray-500 ${errors.message ? 'border-red-500' : ''}`}
+                  placeholder="Tell me about your project..." 
+                  className={cn(
+                    "min-h-[120px] bg-muted/50 border-border focus:ring-primary/20 resize-none",
+                    errors.message && "border-destructive focus:ring-destructive/20"
+                  )}
                 />
-                {errors.message && <p className="text-red-500 text-[10px] mt-1 ml-1">{errors.message.message}</p>}
+                {errors.message && <p className="text-destructive text-xs mt-1 ml-1">{errors.message.message}</p>}
               </div>
 
               <Button 
                 type="submit" 
                 disabled={loading}
-                className="w-full h-12 bg-primary hover:bg-primary/90 text-white rounded-2xl font-bold text-sm uppercase tracking-widest group transition-all"
+                className="w-full h-12 bg-primary hover:bg-primary/90 text-white rounded-xl font-bold shadow-lg transition-all active:scale-95 group"
               >
                 {loading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
