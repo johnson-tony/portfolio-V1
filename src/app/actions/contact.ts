@@ -28,26 +28,36 @@ export async function sendContactMessage(formData: FormData) {
     const newMessage = new Message({ name, email, content });
     await newMessage.save();
 
-    // 2. Send Admin Email
-    await resend.emails.send({
-      from: "Portfolio <onboarding@resend.dev>",
-      to: process.env.ADMIN_EMAIL || "tony@example.com",
-      replyTo: email, // This allows the admin to hit 'reply' in their mail app
-      subject: `New Message from ${name}`,
-      text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${content}\n\n---\nReply directly to this email to contact ${name}.`,
-    });
+    // Revalidate paths to update counts/lists
+    revalidatePath("/admin/dashboard");
+    revalidatePath("/admin/dashboard/messages");
 
-    // 3. Send Auto-reply to User
-    await resend.emails.send({
-      from: "Portfolio <onboarding@resend.dev>",
-      to: email,
-      subject: "Thank you for contacting me!",
-      text: `Hi ${name},\n\nThank you for reaching out! I've received your message and will get back to you as soon as possible.\n\nBest regards,\nJohnson Tony`,
-    });
+    // 2. Attempt to send emails (don't block the DB success if email fails)
+    try {
+      await resend.emails.send({
+        from: "Portfolio <onboarding@resend.dev>",
+        to: process.env.ADMIN_EMAIL || "tony@example.com",
+        replyTo: email,
+        subject: `New Message from ${name}`,
+        text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${content}`,
+      });
+
+      await resend.emails.send({
+        from: "Portfolio <onboarding@resend.dev>",
+        to: email,
+        subject: "Thank you for contacting me!",
+        text: `Hi ${name},\n\nThank you for reaching out! I've received your message and will get back to you soon.`,
+      });
+    } catch (emailError) {
+      console.warn("Email Sending Error (ignoring):", emailError);
+      // We continue because the message is already saved in the DB
+    }
 
     return { success: true };
   } catch (error: any) {
-    console.error("Contact Error:", error);
-    return { success: false, error: error.message };
+    console.error("Database Storage Error:", error);
+    return { success: false, error: "Failed to store message. Please try again later." };
   }
 }
+
+import { revalidatePath } from "next/cache";
