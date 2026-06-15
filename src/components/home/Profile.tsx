@@ -27,7 +27,7 @@ export default function Profile({ data }: ProfileProps) {
               <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">About Me</h2>
               <div className="card-premium p-6 md:p-8">
                 <p className="text-muted-foreground leading-relaxed text-base md:text-lg whitespace-pre-wrap">
-                  {data.bio || "No bio available."}
+                  {data.about || "No info available."}
                 </p>
               </div>
             </motion.div>
