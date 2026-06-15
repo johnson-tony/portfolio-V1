@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Save, Loader2, Palette, Globe, Layout } from "lucide-react";
+import { Save, Loader2, Globe, Layout } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -30,9 +30,10 @@ export default function SettingsManagement() {
     const data = {
       siteTitle: String(formData.get("siteTitle") || ""),
       logoUrl: String(formData.get("logoUrl") || ""),
-      accentColor: String(formData.get("accentColor") || ""),
       heroHeading: String(formData.get("heroHeading") || ""),
       heroSubheading: String(formData.get("heroSubheading") || ""),
+      // Maintain the existing accentColor if present in DB, but don't allow editing it here
+      accentColor: settings?.accentColor || "#1D4ED8", 
     };
 
     const parsed = settingsSchema.safeParse(data);
@@ -56,72 +57,51 @@ export default function SettingsManagement() {
   return (
     <div className="max-w-4xl space-y-8">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">System Settings</h1>
-        <p className="text-gray-500 mt-1">Configure your portfolio's global branding and theme.</p>
+        <h1 className="text-3xl font-bold tracking-tight text-foreground">System Settings</h1>
+        <p className="text-muted-foreground mt-1">Configure your portfolio's global branding and content.</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-8">
         {/* Branding */}
-        <div className="glass-dark p-8 rounded-2xl border border-white/5 space-y-6">
-          <h3 className="text-xl font-bold flex items-center gap-2 border-b border-white/5 pb-4 uppercase tracking-tighter">
+        <div className="card-premium p-8 space-y-6">
+          <h3 className="text-xl font-bold flex items-center gap-2 border-b border-border pb-4">
             <Globe className="w-5 h-5 text-primary" />
             General Branding
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <Label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Site Title</Label>
-              <Input name="siteTitle" defaultValue={settings?.siteTitle || ""} className="glass border-white/10 rounded-md" />
+              <Label className="text-xs font-semibold text-foreground">Site Title</Label>
+              <Input name="siteTitle" defaultValue={settings?.siteTitle || ""} className="h-11 bg-muted/50 border-border focus:ring-primary/20" />
             </div>
             <div className="space-y-2">
-              <Label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Logo URL (Cloudinary)</Label>
-              <Input name="logoUrl" defaultValue={settings?.logoUrl || ""} className="glass border-white/10 rounded-md" />
+              <Label className="text-xs font-semibold text-foreground">Logo URL (Cloudinary)</Label>
+              <Input name="logoUrl" defaultValue={settings?.logoUrl || ""} className="h-11 bg-muted/50 border-border focus:ring-primary/20" />
             </div>
           </div>
         </div>
 
         {/* Hero Content */}
-        <div className="glass-dark p-8 rounded-2xl border border-white/5 space-y-6">
-          <h3 className="text-xl font-bold flex items-center gap-2 border-b border-white/5 pb-4 uppercase tracking-tighter">
+        <div className="card-premium p-8 space-y-6">
+          <h3 className="text-xl font-bold flex items-center gap-2 border-b border-border pb-4">
             <Layout className="w-5 h-5 text-primary" />
             Hero Section Content
           </h3>
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Hero Heading</Label>
-              <Input name="heroHeading" defaultValue={settings?.heroHeading || ""} className="glass border-white/10 rounded-md" />
+              <Label className="text-xs font-semibold text-foreground">Hero Heading</Label>
+              <Input name="heroHeading" defaultValue={settings?.heroHeading || ""} className="h-11 bg-muted/50 border-border focus:ring-primary/20" />
             </div>
             <div className="space-y-2">
-              <Label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Hero Subheading</Label>
-              <Input name="heroSubheading" defaultValue={settings?.heroSubheading || ""} className="glass border-white/10 rounded-md" />
-            </div>
-          </div>
-        </div>
-
-        {/* Theme */}
-        <div className="glass-dark p-8 rounded-2xl border border-white/5 space-y-6">
-          <h3 className="text-xl font-bold flex items-center gap-2 border-b border-white/5 pb-4 uppercase tracking-tighter">
-            <Palette className="w-5 h-5 text-primary" />
-            Theme Customization
-          </h3>
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Primary Accent Color (Hex)</Label>
-              <div className="flex gap-4">
-                <Input name="accentColor" defaultValue={settings?.accentColor || ""} className="glass border-white/10 rounded-md flex-1" />
-                <div 
-                  className="w-11 h-11 rounded-md border border-white/10" 
-                  style={{ backgroundColor: settings?.accentColor || "#F97316" }} 
-                />
-              </div>
-              <p className="text-[10px] text-gray-500 italic">Default is #F97316 (Orange). This will update key highlights.</p>
+              <Label className="text-xs font-semibold text-foreground">Hero Subheading</Label>
+              <Input name="heroSubheading" defaultValue={settings?.heroSubheading || ""} className="h-11 bg-muted/50 border-border focus:ring-primary/20" />
             </div>
           </div>
         </div>
 
         <div className="flex justify-end">
-          <Button type="submit" disabled={updating} className="h-14 px-12 bg-primary hover:bg-primary/90 text-white font-bold text-lg rounded-md orange-glow gap-2 uppercase tracking-widest">
-            {updating ? <Loader2 className="w-6 h-6 animate-spin" /> : <Save className="w-6 h-6" />}
-            Apply System Settings
+          <Button type="submit" disabled={updating} className="h-12 px-8 bg-primary hover:bg-primary/90 text-white font-bold rounded-xl primary-glow shadow-lg transition-all active:scale-95 gap-2">
+            {updating ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
+            Save System Settings
           </Button>
         </div>
       </form>

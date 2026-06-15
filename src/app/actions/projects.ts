@@ -17,6 +17,15 @@ export async function getProjects() {
   }
 }
 
+export async function getProjectsCount() {
+  await dbConnect();
+  try {
+    return await Project.countDocuments({});
+  } catch (error) {
+    return 0;
+  }
+}
+
 export async function getProjectById(id: string) {
   await dbConnect();
   try {

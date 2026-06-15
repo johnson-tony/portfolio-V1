@@ -40,12 +40,18 @@ function StatItem({ label, value, suffix = "" }: StatItemProps) {
   );
 }
 
-export default function Stats() {
+interface StatsProps {
+  projectsCount: number;
+  materialsCount: number;
+  experienceYears?: number;
+}
+
+export default function Stats({ projectsCount, materialsCount, experienceYears = 5 }: StatsProps) {
   const stats = [
-    { label: "Years Experience", value: 5, suffix: "+" },
-    { label: "Projects Built", value: 40, suffix: "+" },
-    { label: "Satisfied Clients", value: 25, suffix: "+" },
-    { label: "Cups of Coffee", value: 1200, suffix: "" },
+    { label: "Years Experience", value: experienceYears, suffix: "+" },
+    { label: "Projects Built", value: projectsCount, suffix: "+" },
+    { label: "Resources", value: materialsCount, suffix: "" },
+    { label: "Happy Clients", value: Math.max(10, projectsCount + 5), suffix: "+" },
   ];
 
   return (

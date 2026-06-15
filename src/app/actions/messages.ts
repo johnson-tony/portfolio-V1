@@ -18,6 +18,26 @@ export async function getMessages() {
   }
 }
 
+export async function getMessagesCount() {
+  try {
+    await checkAuth();
+    await dbConnect();
+    return await Message.countDocuments({});
+  } catch (error) {
+    return 0;
+  }
+}
+
+export async function getUnreadMessagesCount() {
+  try {
+    await checkAuth();
+    await dbConnect();
+    return await Message.countDocuments({ isRead: false });
+  } catch (error) {
+    return 0;
+  }
+}
+
 export async function markAsRead(id: string): Promise<ActionResponse> {
   try {
     await checkAuth();

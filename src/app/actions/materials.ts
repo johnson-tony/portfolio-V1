@@ -18,6 +18,15 @@ export async function getMaterials() {
   }
 }
 
+export async function getMaterialsCount() {
+  await dbConnect();
+  try {
+    return await Material.countDocuments({});
+  } catch (error) {
+    return 0;
+  }
+}
+
 export async function addMaterial(data: any): Promise<ActionResponse> {
   try {
     await checkAuth();

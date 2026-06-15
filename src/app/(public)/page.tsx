@@ -5,17 +5,19 @@ import Materials from "@/components/home/Materials";
 import Contact from "@/components/home/Contact";
 import Stats from "@/components/home/Stats";
 import PageWrapper from "@/components/layout/PageWrapper";
-import { getProjects } from "@/app/actions/projects";
+import { getProjects, getProjectsCount } from "@/app/actions/projects";
 import { getSettings } from "@/app/actions/settings";
 import { getProfile } from "@/app/actions/profile";
-import { getMaterials } from "@/app/actions/materials";
+import { getMaterials, getMaterialsCount } from "@/app/actions/materials";
 
 export default async function Home() {
-  const [projects, settings, profile, materials] = await Promise.all([
+  const [projects, settings, profile, materials, projectsCount, materialsCount] = await Promise.all([
     getProjects(),
     getSettings(),
     getProfile(),
     getMaterials(),
+    getProjectsCount(),
+    getMaterialsCount(),
   ]);
 
   const hasProjects = projects && projects.length > 0;
@@ -29,8 +31,11 @@ export default async function Home() {
         subheading={settings?.heroSubheading} 
       />
       
-      {/* Show Stats if there is at least some content to count */}
-      {hasProjects && <Stats />}
+      {/* Dynamic Stats */}
+      <Stats 
+        projectsCount={projectsCount} 
+        materialsCount={materialsCount} 
+      />
       
       {hasProfile && <Profile data={profile} />}
       

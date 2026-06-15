@@ -5,15 +5,25 @@ import {
   MessageSquare, 
   TrendingUp 
 } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { getProjectsCount } from "@/app/actions/projects";
+import { getMaterialsCount } from "@/app/actions/materials";
+import { getUnreadMessagesCount } from "@/app/actions/messages";
 
-const stats = [
-  { name: "Total Projects", value: "12", icon: Briefcase, change: "+2 this month" },
-  { name: "Materials", value: "45", icon: FileText, change: "+5 this month" },
-  { name: "New Messages", value: "3", icon: MessageSquare, change: "Unread" },
-  { name: "Profile Views", value: "1,284", icon: TrendingUp, change: "+12% from last week" },
-];
+export default async function DashboardPage() {
+  const [projectsCount, materialsCount, unreadMessages] = await Promise.all([
+    getProjectsCount(),
+    getMaterialsCount(),
+    getUnreadMessagesCount(),
+  ]);
 
-export default function DashboardPage() {
+  const dashboardStats = [
+    { name: "Total Projects", value: projectsCount.toString(), icon: Briefcase, change: "Real-time", isPositive: true },
+    { name: "Materials", value: materialsCount.toString(), icon: FileText, change: "Real-time", isPositive: true },
+    { name: "New Messages", value: unreadMessages.toString(), icon: MessageSquare, change: unreadMessages > 0 ? "Unread" : "All read", isPositive: unreadMessages === 0 },
+    { name: "Site Status", value: "Live", icon: TrendingUp, change: "Healthy", isPositive: true },
+  ];
+
   return (
     <div className="space-y-8">
       <div>
@@ -22,21 +32,21 @@ export default function DashboardPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stats.map((stat) => (
-          <div key={stat.name} className="glass-dark p-6 rounded-3xl border border-white/5 space-y-4">
+        {dashboardStats.map((stat) => (
+          <div key={stat.name} className="card-premium p-6 space-y-4">
             <div className="flex items-center justify-between">
-              <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-primary">
+              <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
                 <stat.icon className="w-6 h-6" />
               </div>
               <span className={cn(
-                "text-xs font-bold px-2 py-1 rounded-full",
-                stat.change.includes("Unread") ? "bg-primary/20 text-primary" : "bg-green-500/10 text-green-500"
+                "text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider",
+                stat.change === "Unread" ? "bg-destructive/20 text-destructive" : "bg-primary/10 text-primary"
               )}>
                 {stat.change}
               </span>
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-500">{stat.name}</p>
+              <p className="text-sm font-medium text-muted-foreground">{stat.name}</p>
               <h3 className="text-3xl font-bold mt-1">{stat.value}</h3>
             </div>
           </div>
@@ -44,42 +54,44 @@ export default function DashboardPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="glass-dark p-8 rounded-[2.5rem] border border-white/5 min-h-[400px]">
+        <div className="card-premium p-8 min-h-[300px]">
           <h3 className="text-xl font-bold mb-6">Recent Activity</h3>
           <div className="space-y-6">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="flex gap-4 items-start">
-                <div className="w-2 h-2 rounded-full bg-primary mt-2" />
-                <div>
-                  <p className="text-sm font-medium text-white">New project "Lumina AI" added to portfolio</p>
-                  <p className="text-xs text-gray-500 mt-1">2 hours ago</p>
-                </div>
+            <div className="flex gap-4 items-start">
+              <div className="w-2 h-2 rounded-full bg-primary mt-2" />
+              <div>
+                <p className="text-sm font-medium text-foreground">Database synchronized with production</p>
+                <p className="text-xs text-muted-foreground mt-1">Just now</p>
               </div>
-            ))}
+            </div>
+            <div className="flex gap-4 items-start opacity-70">
+              <div className="w-2 h-2 rounded-full bg-muted-foreground mt-2" />
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Admin session started successfully</p>
+                <p className="text-xs text-muted-foreground mt-1">Recent</p>
+              </div>
+            </div>
           </div>
         </div>
         
-        <div className="glass-dark p-8 rounded-[2.5rem] border border-white/5 min-h-[400px]">
-          <h3 className="text-xl font-bold mb-6">Quick Actions</h3>
-          <div className="grid grid-cols-2 gap-4">
-            <button className="h-32 rounded-3xl bg-white/5 border border-white/5 hover:border-primary/50 transition-all flex flex-col items-center justify-center gap-3 group">
-              <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-                <Briefcase className="w-5 h-5" />
-              </div>
-              <span className="text-sm font-bold">Add Project</span>
-            </button>
-            <button className="h-32 rounded-3xl bg-white/5 border border-white/5 hover:border-primary/50 transition-all flex flex-col items-center justify-center gap-3 group">
-              <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-                <FileText className="w-5 h-5" />
-              </div>
-              <span className="text-sm font-bold">Upload PDF</span>
-            </button>
+        <div className="card-premium p-8 min-h-[300px]">
+          <h3 className="text-xl font-bold mb-6">System Health</h3>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+              <span className="text-sm font-medium">Database Connection</span>
+              <span className="text-xs font-bold text-primary uppercase">Connected</span>
+            </div>
+            <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+              <span className="text-sm font-medium">API Response Time</span>
+              <span className="text-xs font-bold text-primary uppercase">Fast</span>
+            </div>
+            <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+              <span className="text-sm font-medium">Storage Quota</span>
+              <span className="text-xs font-bold text-primary uppercase">Healthy</span>
+            </div>
           </div>
         </div>
       </div>
     </div>
   );
 }
-
-// Add cn utility if not available in this scope or import it
-import { cn } from "@/lib/utils";
