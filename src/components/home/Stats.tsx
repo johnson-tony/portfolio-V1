@@ -30,12 +30,12 @@ function StatItem({ label, value, suffix = "" }: StatItemProps) {
   }, [isInView, spring, value]);
 
   return (
-    <div ref={ref} className="text-center space-y-2">
-      <div className="text-4xl md:text-5xl font-bold tracking-tight text-primary flex items-center justify-center">
+    <div ref={ref} className="text-center space-y-1">
+      <div className="text-3xl md:text-5xl font-bold tracking-tight text-primary flex items-center justify-center">
         <motion.span>{displayValue}</motion.span>
         {suffix && <span>{suffix}</span>}
       </div>
-      <p className="text-muted-foreground text-sm font-medium uppercase tracking-wider">{label}</p>
+      <p className="text-muted-foreground text-[10px] md:text-xs font-bold uppercase tracking-widest">{label}</p>
     </div>
   );
 }
@@ -46,16 +46,16 @@ interface StatsProps {
   experienceYears?: number;
 }
 
-export default function Stats({ projectsCount, materialsCount, experienceYears = 5 }: StatsProps) {
+export default function Stats({ projectsCount, materialsCount, experienceYears = 1 }: StatsProps) {
   const stats = [
-    { label: "Years Experience", value: experienceYears, suffix: "+" },
+    { label: "Year Experience", value: experienceYears, suffix: "+" },
     { label: "Projects Built", value: projectsCount, suffix: "+" },
-    { label: "Resources", value: materialsCount, suffix: "" },
-    { label: "Happy Clients", value: Math.max(10, projectsCount + 5), suffix: "+" },
+    { label: "Technical Resources", value: materialsCount, suffix: "" },
+    { label: "Contributions", value: Math.max(50, projectsCount * 10), suffix: "+" },
   ];
 
   return (
-    <section className="py-12 bg-muted/20 border-y border-border">
+    <section className="py-10 bg-muted/30 border-y border-border">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
           {stats.map((stat, i) => (

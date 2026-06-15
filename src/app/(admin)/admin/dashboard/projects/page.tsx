@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { getProjects, addProject, updateProject, deleteProject } from "@/app/actions/projects";
 import FileUpload from "@/components/admin/FileUpload";
@@ -91,36 +91,36 @@ export default function ProjectManagement() {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Project Management</h1>
-          <p className="text-gray-500 mt-1">Add, edit, or remove projects from your portfolio.</p>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">Project Management</h1>
+          <p className="text-muted-foreground mt-1">Add, edit, or remove projects from your portfolio.</p>
         </div>
-        <Button onClick={() => openModal()} className="h-12 bg-primary hover:bg-primary/90 text-white rounded-md orange-glow gap-2 font-bold px-6">
-          <Plus className="w-5 h-5" /> Add New Project
+        <Button onClick={() => openModal()} className="h-11 bg-primary hover:bg-primary/90 text-white rounded-xl primary-glow gap-2 font-bold px-6 active:scale-95 transition-all">
+          <Plus className="w-5 h-5" /> Add Project
         </Button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {projects.map((project) => (
-          <div key={project._id} className="glass-dark rounded-2xl overflow-hidden border border-white/5 flex flex-col group">
+          <div key={project._id} className="card-premium overflow-hidden flex flex-col group">
             <div className="relative h-48 w-full">
               <Image src={project.imageUrl} alt={project.title} fill className="object-cover" />
-              <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
-                <Button size="icon" variant="secondary" onClick={() => openModal(project)} className="rounded-md glass border-white/10">
+              <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center gap-3 backdrop-blur-[2px]">
+                <Button size="icon" variant="secondary" onClick={() => openModal(project)} className="rounded-xl h-10 w-10">
                   <Pencil className="w-4 h-4" />
                 </Button>
-                <Button size="icon" variant="destructive" onClick={() => handleDelete(project._id)} className="rounded-md">
+                <Button size="icon" variant="destructive" onClick={() => handleDelete(project._id)} className="rounded-xl h-10 w-10">
                   <Trash2 className="w-4 h-4" />
                 </Button>
               </div>
             </div>
             <div className="p-6 space-y-3 flex-1">
-              <h3 className="text-xl font-bold">{project.title}</h3>
-              <p className="text-gray-400 text-sm line-clamp-2">{project.description}</p>
-              <div className="flex flex-wrap gap-1 pt-2">
+              <h3 className="text-xl font-bold group-hover:text-primary transition-colors">{project.title}</h3>
+              <p className="text-muted-foreground text-sm line-clamp-2">{project.description}</p>
+              <div className="flex flex-wrap gap-1.5 pt-2">
                 {project.techStack.slice(0, 3).map((tech: string) => (
-                  <span key={tech} className="text-[10px] font-bold uppercase tracking-widest text-primary/70">{tech}</span>
+                  <span key={tech} className="px-2 py-0.5 rounded-md bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider">{tech}</span>
                 ))}
               </div>
             </div>
@@ -129,58 +129,63 @@ export default function ProjectManagement() {
       </div>
 
       <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-        <DialogContent className="max-w-3xl glass-dark border-white/10 text-white max-h-[90vh] overflow-y-auto p-0 rounded-2xl">
-          <div className="p-8 space-y-6">
+        <DialogContent className="max-w-4xl w-[95vw] h-auto max-h-[90vh] overflow-y-auto p-0 rounded-2xl border-border bg-background shadow-2xl">
+          <div className="p-6 md:p-10 space-y-8">
             <DialogHeader>
-              <DialogTitle className="text-2xl font-bold uppercase tracking-tighter">{editingProject ? "Edit Project" : "Add New Project"}</DialogTitle>
+              <DialogTitle className="text-2xl font-bold tracking-tight text-foreground">
+                {editingProject ? "Refine Project" : "New Project Creation"}
+              </DialogTitle>
             </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <form onSubmit={handleSubmit} className="space-y-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div className="space-y-6">
                   <div className="space-y-2">
-                    <Label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Project Title</Label>
-                    <Input name="title" defaultValue={editingProject?.title || ""} required className="glass border-white/10 rounded-md" />
+                    <Label className="text-xs font-semibold text-foreground ml-1">Project Title</Label>
+                    <Input name="title" defaultValue={editingProject?.title || ""} required className="h-11 bg-muted/50 border-border focus:ring-primary/20" placeholder="e.g. Modern SaaS Platform" />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Technologies (Comma separated)</Label>
-                    <Input name="techStack" defaultValue={editingProject?.techStack?.join(", ") || ""} required className="glass border-white/10 rounded-md" placeholder="Next.js, Tailwind..." />
+                    <Label className="text-xs font-semibold text-foreground ml-1">Technologies (Comma separated)</Label>
+                    <Input name="techStack" defaultValue={editingProject?.techStack?.join(", ") || ""} required className="h-11 bg-muted/50 border-border focus:ring-primary/20" placeholder="Next.js, Tailwind, TypeScript..." />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Short Description</Label>
-                    <Input name="description" defaultValue={editingProject?.description || ""} required className="glass border-white/10 rounded-md" />
+                    <Label className="text-xs font-semibold text-foreground ml-1">Short Description</Label>
+                    <Input name="description" defaultValue={editingProject?.description || ""} required className="h-11 bg-muted/50 border-border focus:ring-primary/20" placeholder="Brief summary of the project" />
                   </div>
                 </div>
                 
                 <div className="space-y-2">
-                  <FileUpload 
-                    label="Project Image" 
-                    currentUrl={imageUrl} 
-                    onUploadComplete={(url) => setImageUrl(url)} 
-                  />
+                   <Label className="text-xs font-semibold text-foreground ml-1">Hero Image</Label>
+                   <div className="card-premium p-4 bg-muted/30">
+                    <FileUpload 
+                      label="" 
+                      currentUrl={imageUrl} 
+                      onUploadComplete={(url) => setImageUrl(url)} 
+                    />
+                   </div>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Detailed Description</Label>
-                <Textarea name="detailedDescription" defaultValue={editingProject?.detailedDescription} required className="glass border-white/10 min-h-[120px] resize-none rounded-md" />
+                <Label className="text-xs font-semibold text-foreground ml-1">Detailed Case Study</Label>
+                <Textarea name="detailedDescription" defaultValue={editingProject?.detailedDescription} required className="min-h-[160px] bg-muted/50 border-border focus:ring-primary/20 resize-none rounded-xl p-4" placeholder="Deep dive into the problem, solution, and technical challenges..." />
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">GitHub URL</Label>
-                  <Input name="githubUrl" defaultValue={editingProject?.githubUrl} className="glass border-white/10 rounded-md" placeholder="https://github.com/..." />
+                  <Label className="text-xs font-semibold text-foreground ml-1">GitHub Link</Label>
+                  <Input name="githubUrl" defaultValue={editingProject?.githubUrl} className="h-11 bg-muted/50 border-border focus:ring-primary/20" placeholder="https://github.com/..." />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Live Demo URL</Label>
-                  <Input name="liveDemoUrl" defaultValue={editingProject?.liveDemoUrl} className="glass border-white/10 rounded-md" placeholder="https://demo.com/..." />
+                  <Label className="text-xs font-semibold text-foreground ml-1">Live Demo Link</Label>
+                  <Input name="liveDemoUrl" defaultValue={editingProject?.liveDemoUrl} className="h-11 bg-muted/50 border-border focus:ring-primary/20" placeholder="https://demo.com/..." />
                 </div>
               </div>
               
-              <div className="flex justify-end gap-4 pt-6 border-t border-white/5">
-                <Button type="button" variant="ghost" onClick={() => setModalOpen(false)} className="rounded-md">Cancel</Button>
-                <Button type="submit" disabled={submitting || !imageUrl} className="bg-primary hover:bg-primary/90 text-white px-8 h-12 font-bold gap-2 rounded-md orange-glow uppercase tracking-widest text-xs">
-                  {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-                  {editingProject ? "Update Project" : "Create Project"}
+              <div className="flex items-center justify-end gap-3 pt-6 border-t border-border">
+                <Button type="button" variant="ghost" onClick={() => setModalOpen(false)} className="rounded-xl px-6 h-12 font-semibold">Cancel</Button>
+                <Button type="submit" disabled={submitting || !imageUrl} className="bg-primary hover:bg-primary/90 text-white px-10 h-12 font-bold gap-2 rounded-xl primary-glow shadow-lg transition-all active:scale-95">
+                  {submitting ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
+                  {editingProject ? "Update Project" : "Publish Project"}
                 </Button>
               </div>
             </form>

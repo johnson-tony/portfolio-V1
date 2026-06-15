@@ -13,7 +13,7 @@ interface HeroProps {
 
 export default function Hero({ heading, subheading }: HeroProps) {
   return (
-    <section id="hero" className="relative min-h-[90vh] flex items-center justify-center overflow-hidden px-6 pt-20 hero-glow">
+    <section id="hero" className="relative min-h-[80vh] flex items-center justify-center overflow-hidden px-6 pt-16 md:pt-24 hero-glow">
       <div className="relative z-10 max-w-5xl text-center">
         <motion.div
           initial="hidden"
