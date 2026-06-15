@@ -9,15 +9,23 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/components/providers/ThemeProvider";
 
-const navLinks = [
-  { name: "Hero", href: "/#hero" },
+interface NavLink {
+  name: string;
+  href: string;
+}
+
+interface NavbarProps {
+  links?: NavLink[];
+}
+
+const defaultLinks: NavLink[] = [
   { name: "Profile", href: "/#profile" },
   { name: "Projects", href: "/#projects" },
   { name: "Materials", href: "/#materials" },
   { name: "Contact", href: "/#contact" },
 ];
 
-export default function Navbar() {
+export default function Navbar({ links = defaultLinks }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
@@ -34,7 +42,7 @@ export default function Navbar() {
   }, []);
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    if (pathname === "/") {
+    if (pathname === "/" && href.startsWith("/#")) {
       e.preventDefault();
       const targetId = href.replace("/#", "#");
       const element = document.querySelector(targetId);
@@ -73,7 +81,7 @@ export default function Navbar() {
 
         {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-1">
-          {navLinks.map((link) => (
+          {links.map((link) => (
             <Link
               key={link.name}
               href={link.href}
@@ -128,7 +136,7 @@ export default function Navbar() {
             className="absolute top-full left-0 right-0 p-4 md:hidden"
           >
             <div className="glass rounded-2xl border border-border/50 p-4 shadow-xl flex flex-col gap-2">
-              {navLinks.map((link) => (
+              {links.map((link) => (
                 <Link
                   key={link.name}
                   href={link.href}

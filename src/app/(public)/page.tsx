@@ -18,16 +18,26 @@ export default async function Home() {
     getMaterials(),
   ]);
 
+  const hasProjects = projects && projects.length > 0;
+  const hasMaterials = materials && materials.length > 0;
+  const hasProfile = !!profile;
+
   return (
     <PageWrapper>
       <Hero 
         heading={settings?.heroHeading} 
         subheading={settings?.heroSubheading} 
       />
-      <Stats />
-      <Profile data={profile} />
-      <Projects initialProjects={projects} />
-      <Materials initialMaterials={materials} />
+      
+      {/* Show Stats if there is at least some content to count */}
+      {hasProjects && <Stats />}
+      
+      {hasProfile && <Profile data={profile} />}
+      
+      {hasProjects && <Projects initialProjects={projects} />}
+      
+      {hasMaterials && <Materials initialMaterials={materials} />}
+      
       <Contact />
     </PageWrapper>
   );
