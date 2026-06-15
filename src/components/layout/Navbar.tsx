@@ -135,14 +135,14 @@ export default function Navbar({ links = defaultLinks }: NavbarProps) {
             exit={{ opacity: 0, y: -20 }}
             className="absolute top-full left-0 right-0 p-4 md:hidden"
           >
-            <div className="glass rounded-2xl border border-border/50 p-4 shadow-xl flex flex-col gap-2">
+            <div className="glass rounded-2xl border border-border/50 p-2 shadow-xl flex flex-col gap-1">
               {links.map((link) => (
                 <Link
                   key={link.name}
                   href={link.href}
                   prefetch={false}
                   onClick={(e) => handleNavClick(e, link.href)}
-                  className="px-4 py-3 rounded-xl text-lg font-medium text-muted-foreground hover:text-primary hover:bg-primary/5 transition-all"
+                  className="px-4 py-2 rounded-xl text-sm font-medium text-muted-foreground hover:text-primary hover:bg-primary/5 transition-all"
                 >
                   {link.name}
                 </Link>
