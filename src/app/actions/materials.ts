@@ -50,6 +50,11 @@ export async function deleteMaterial(id: string): Promise<ActionResponse> {
     await checkAuth();
     await dbConnect();
     
+    const material = await Material.findById(id);
+    if (material && material.fileUrl) {
+      await deleteFile(material.fileUrl);
+    }
+
     await Material.findByIdAndDelete(id);
     
     revalidatePath("/");
@@ -60,6 +65,8 @@ export async function deleteMaterial(id: string): Promise<ActionResponse> {
     return { success: false, error: error.message || "Failed to delete material" };
   }
 }
+
+import { deleteFile } from "./upload";
 
 export async function updateMaterial(id: string, data: any): Promise<ActionResponse> {
   try {

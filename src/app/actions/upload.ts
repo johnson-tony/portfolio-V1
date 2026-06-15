@@ -32,3 +32,33 @@ export async function uploadFile(formData: FormData): Promise<ActionResponse<str
     return { success: false, error: error.message || "Failed to upload file" };
   }
 }
+
+export async function deleteFile(url: string): Promise<ActionResponse> {
+  if (!url || !url.includes("cloudinary.com")) return { success: true };
+
+  try {
+    await checkAuth();
+
+    // Extract public_id from Cloudinary URL
+    // Format: https://res.cloudinary.com/cloud_name/image/upload/v1234567/folder/filename.ext
+    const parts = url.split("/");
+    const uploadIndex = parts.indexOf("upload");
+    if (uploadIndex === -1) return { success: false, error: "Invalid Cloudinary URL" };
+
+    // The public_id starts after the version (v1234567)
+    const publicIdWithExt = parts.slice(uploadIndex + 2).join("/");
+    const publicId = publicIdWithExt.split(".")[0];
+
+    // Determine resource type (raw for PDFs, image for others)
+    const isPdf = url.toLowerCase().endsWith(".pdf");
+    
+    await cloudinary.uploader.destroy(publicId, {
+      resource_type: isPdf ? "raw" : "image"
+    });
+
+    return { success: true };
+  } catch (error: any) {
+    console.error("Cloudinary Delete Error:", error);
+    return { success: false, error: "Failed to delete file from Cloudinary" };
+  }
+}

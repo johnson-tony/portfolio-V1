@@ -77,6 +77,21 @@ export async function deleteProject(id: string): Promise<ActionResponse> {
     await checkAuth();
     await dbConnect();
     
+    // 1. Get project info to find image URLs
+    const project = await Project.findById(id);
+    if (project) {
+      // 2. Delete main image from Cloudinary
+      if (project.imageUrl) {
+        await deleteFile(project.imageUrl);
+      }
+      // 3. Delete any screenshots
+      if (project.screenshots && project.screenshots.length > 0) {
+        for (const url of project.screenshots) {
+          await deleteFile(url);
+        }
+      }
+    }
+
     await Project.findByIdAndDelete(id);
     
     revalidatePath("/");
@@ -89,3 +104,4 @@ export async function deleteProject(id: string): Promise<ActionResponse> {
 }
 
 import { revalidatePath } from "next/cache";
+import { deleteFile } from "./upload";
