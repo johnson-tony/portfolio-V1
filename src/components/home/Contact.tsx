@@ -119,53 +119,53 @@ export default function Contact() {
               />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="name" className="text-xs font-semibold text-foreground ml-1">Name</Label>
+                  <Label htmlFor="name" className="text-xs font-bold text-muted-foreground ml-1 uppercase tracking-widest">Name</Label>
                   <Input 
                     id="name" 
                     {...register("name")}
                     placeholder="Your Name" 
                     className={cn(
-                      "h-11 bg-muted/50 border-border focus:ring-primary/20",
+                      "h-11 bg-background/50 backdrop-blur-sm border-border focus:border-primary/50 focus:ring-primary/10 rounded-xl transition-all",
                       errors.name && "border-destructive focus:ring-destructive/20"
                     )}
                   />
-                  {errors.name && <p className="text-destructive text-xs mt-1 ml-1">{errors.name.message}</p>}
+                  {errors.name && <p className="text-destructive text-[10px] mt-1 ml-1 font-bold">{errors.name.message}</p>}
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-xs font-semibold text-foreground ml-1">Email</Label>
+                  <Label htmlFor="email" className="text-xs font-bold text-muted-foreground ml-1 uppercase tracking-widest">Email</Label>
                   <Input 
                     id="email" 
                     type="email" 
                     {...register("email")}
                     placeholder="you@example.com" 
                     className={cn(
-                      "h-11 bg-muted/50 border-border focus:ring-primary/20",
+                      "h-11 bg-background/50 backdrop-blur-sm border-border focus:border-primary/50 focus:ring-primary/10 rounded-xl transition-all",
                       errors.email && "border-destructive focus:ring-destructive/20"
                     )}
                   />
-                  {errors.email && <p className="text-destructive text-xs mt-1 ml-1">{errors.email.message}</p>}
+                  {errors.email && <p className="text-destructive text-[10px] mt-1 ml-1 font-bold">{errors.email.message}</p>}
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="message" className="text-xs font-semibold text-foreground ml-1">Message</Label>
+                <Label htmlFor="message" className="text-xs font-bold text-muted-foreground ml-1 uppercase tracking-widest">Message</Label>
                 <Textarea 
                   id="message" 
                   {...register("message")}
                   placeholder="Tell me about your project..." 
                   className={cn(
-                    "min-h-[120px] bg-muted/50 border-border focus:ring-primary/20 resize-none",
+                    "min-h-[150px] bg-background/50 backdrop-blur-sm border-border focus:border-primary/50 focus:ring-primary/10 rounded-xl resize-none transition-all",
                     errors.message && "border-destructive focus:ring-destructive/20"
                   )}
                 />
-                {errors.message && <p className="text-destructive text-xs mt-1 ml-1">{errors.message.message}</p>}
+                {errors.message && <p className="text-destructive text-[10px] mt-1 ml-1 font-bold">{errors.message.message}</p>}
               </div>
 
               <Button 
                 type="submit" 
                 disabled={loading}
-                className="w-full h-12 bg-primary hover:bg-primary/90 text-white rounded-xl font-bold shadow-lg transition-all active:scale-95 group"
+                className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full font-bold shadow-md transition-all duration-300 hover:scale-[1.02] active:scale-95 group primary-glow"
               >
                 {loading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />

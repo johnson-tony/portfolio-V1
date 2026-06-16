@@ -20,6 +20,7 @@ interface NavbarProps {
 
 const defaultLinks: NavLink[] = [
   { name: "Profile", href: "/#profile" },
+  { name: "Experience", href: "/#experience" },
   { name: "Projects", href: "/#projects" },
   { name: "Materials", href: "/#materials" },
   { name: "Contact", href: "/#contact" },
@@ -80,27 +81,42 @@ export default function Navbar({ links = defaultLinks }: NavbarProps) {
         </Link>
 
         {/* Desktop Links */}
-        <div className="hidden md:flex items-center gap-1">
-          {links.map((link) => (
-            <Link
-              key={link.name}
-              href={link.href}
-              prefetch={false}
-              onClick={(e) => handleNavClick(e, link.href)}
-              className="px-4 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-all"
-            >
-              {link.name}
-            </Link>
-          ))}
-          <div className="w-px h-6 bg-border mx-2" />
+        <div className="hidden md:flex items-center gap-1 bg-background/50 backdrop-blur-lg border border-border/50 rounded-full px-2 py-1.5 shadow-sm">
+          {links.map((link) => {
+            const isActive = pathname === link.href || (link.href.startsWith("/#") && pathname === "/");
+            return (
+              <Link
+                key={link.name}
+                href={link.href}
+                prefetch={false}
+                onClick={(e) => handleNavClick(e, link.href)}
+                className={cn(
+                  "relative px-4 py-2 rounded-full text-sm font-medium transition-all duration-300",
+                  isActive 
+                    ? "text-primary" 
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                )}
+              >
+                {isActive && (
+                  <motion.span
+                    layoutId="activeNav"
+                    className="absolute inset-0 bg-primary/10 rounded-full -z-10"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+                {link.name}
+              </Link>
+            );
+          })}
+          <div className="w-px h-4 bg-border/50 mx-2" />
           <Button
             type="button"
             variant="ghost"
             size="icon"
-            className="rounded-lg"
+            className="rounded-full w-9 h-9"
             onClick={() => setTheme(isDark ? "light" : "dark")}
           >
-            {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </Button>
         </div>
 

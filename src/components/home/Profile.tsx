@@ -24,9 +24,14 @@ export default function Profile({ data }: ProfileProps) {
               transition={{ duration: 0.5 }}
               className="space-y-6"
             >
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">About Me</h2>
-              <div className="card-premium p-6 md:p-8">
-                <p className="text-muted-foreground leading-relaxed text-base md:text-lg whitespace-pre-wrap">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                  <Mail className="w-5 h-5" />
+                </div>
+                <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">About Me</h2>
+              </div>
+              <div className="card-premium p-6 md:p-8 bg-background/40">
+                <p className="text-muted-foreground leading-relaxed text-base md:text-lg whitespace-pre-wrap font-medium">
                   {data.about || "No info available."}
                 </p>
               </div>
@@ -38,21 +43,28 @@ export default function Profile({ data }: ProfileProps) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.2 }}
-                className="space-y-6"
+                className="space-y-8"
               >
-                <h3 className="text-xl md:text-2xl font-semibold flex items-center gap-2">
-                  <Code2 className="text-primary w-5 h-5" />
-                  Technical Expertise
-                </h3>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                    <Code2 className="w-5 h-5" />
+                  </div>
+                  <h3 className="text-xl md:text-2xl font-bold">Technical Expertise</h3>
+                </div>
                 <div className="flex flex-wrap gap-2 md:gap-3">
                   {data.skills.map((skill: string, index: number) => (
                     <motion.span
                       key={skill}
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: index * 0.05 }}
+                      initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                      whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                      transition={{ 
+                        type: "spring",
+                        stiffness: 260,
+                        damping: 20,
+                        delay: index * 0.05 
+                      }}
                       viewport={{ once: true }}
-                      className="px-4 py-2 rounded-lg bg-muted text-foreground text-sm font-medium border border-border/50 hover:border-primary/30 transition-colors"
+                      className="px-5 py-2.5 rounded-full bg-background/50 backdrop-blur-sm text-foreground text-sm font-bold border border-border hover:border-primary/50 transition-all cursor-default shadow-sm hover:scale-105"
                     >
                       {skill}
                     </motion.span>
@@ -69,7 +81,7 @@ export default function Profile({ data }: ProfileProps) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="card-premium p-6 md:p-8 space-y-8"
+              className="card-premium p-5 md:p-6 space-y-8"
             >
               {data.education && data.education.length > 0 && (
                 <div className="space-y-6">

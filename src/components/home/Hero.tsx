@@ -49,7 +49,7 @@ export default function Hero({ heading, subheading }: HeroProps) {
               visible: { opacity: 1, y: 0 }
             }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-foreground leading-[1.1]"
+            className="text-[40px] md:text-[64px] font-bold tracking-tight mb-6 text-foreground leading-[1.1]"
           >
             {heading || "Crafting Digital Experiences with Precision"}
           </motion.h1>
@@ -60,7 +60,7 @@ export default function Hero({ heading, subheading }: HeroProps) {
               visible: { opacity: 1, y: 0 }
             }}
             transition={{ duration: 0.8 }}
-            className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed"
+            className="text-muted-foreground text-[16px] md:text-[18px] max-w-2xl mx-auto mb-10 leading-relaxed"
           >
             {subheading || "Full Stack Developer specializing in building exceptional digital products that combine beautiful design with robust engineering."}
           </motion.p>
@@ -75,7 +75,7 @@ export default function Hero({ heading, subheading }: HeroProps) {
             <Link href="/#projects" prefetch={false}>
               <Button 
                 size="lg" 
-                className="h-12 px-8 bg-primary hover:bg-primary/90 text-white rounded-full primary-glow shadow-lg transition-all duration-300 hover:scale-[1.02] active:scale-95 group"
+                className="h-12 px-8 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full primary-glow shadow-md transition-all duration-300 hover:scale-[1.02] active:scale-95 group"
               >
                 Explore Projects
                 <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -85,7 +85,7 @@ export default function Hero({ heading, subheading }: HeroProps) {
               <Button 
                 size="lg" 
                 variant="outline" 
-                className="h-12 px-8 rounded-full border-border hover:bg-muted transition-all duration-300 hover:scale-[1.02] active:scale-95"
+                className="h-12 px-8 rounded-full border-primary/20 bg-background/50 backdrop-blur-sm hover:bg-muted/50 transition-all duration-300 hover:scale-[1.02] active:scale-95"
               >
                 Let's Talk
               </Button>

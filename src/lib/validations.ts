@@ -72,3 +72,12 @@ export const settingsSchema = z.object({
   heroHeading: z.string().min(5, "Hero heading must be at least 5 characters"),
   heroSubheading: z.string().min(10, "Hero subheading must be at least 10 characters"),
 });
+
+export const experienceSchema = z.object({
+  company: z.string().min(2, "Company name must be at least 2 characters"),
+  position: z.string().min(2, "Position must be at least 2 characters"),
+  period: z.string().min(2, "Period is required (e.g., 2022 - Present)"),
+  location: z.string().min(2, "Location is required").optional().or(z.literal("")),
+  description: z.string().min(10, "Description must be at least 10 characters"),
+  order: z.number().default(0),
+});

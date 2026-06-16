@@ -98,7 +98,7 @@ export default function Materials({ initialMaterials }: MaterialsProps) {
 
         <motion.div 
           layout
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
         >
           <AnimatePresence mode="popLayout">
             {filteredMaterials.map((item, index) => (
@@ -110,13 +110,13 @@ export default function Materials({ initialMaterials }: MaterialsProps) {
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ delay: index * 0.05 }}
                 viewport={{ once: true }}
-                className="card-premium p-6 group flex flex-col h-full"
+                className="card-premium p-5 md:p-6 group flex flex-col h-full bg-background/40"
               >
                 <div className="flex items-start justify-between mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300 shadow-sm">
+                  <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500 shadow-sm">
                     <FileText className="w-6 h-6" />
                   </div>
-                  <Badge variant="secondary" className="bg-muted text-muted-foreground rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider">
+                  <Badge variant="secondary" className="bg-background/50 backdrop-blur-sm text-muted-foreground border-border rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider">
                     {item.category}
                   </Badge>
                 </div>
@@ -128,7 +128,7 @@ export default function Materials({ initialMaterials }: MaterialsProps) {
                 <Button 
                   onClick={() => setViewingPdf(item)}
                   variant="outline"
-                  className="w-full h-11 rounded-lg font-semibold gap-2 group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all duration-300"
+                  className="w-full h-11 rounded-full font-bold gap-2 border-primary/20 bg-background/50 hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-300"
                 >
                   <Eye className="w-4 h-4" /> View Resource
                 </Button>

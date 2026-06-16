@@ -183,56 +183,65 @@ export default function MaterialsManagement() {
           setFileUrl("");
         }
       }}>
-        <DialogContent className="max-w-xl glass-dark border-white/10 text-white p-0 overflow-hidden rounded-2xl">
-          <div className="p-8 space-y-6">
+        <DialogContent className="max-w-4xl w-[95vw] h-auto max-h-[90vh] overflow-y-auto p-0 rounded-2xl border-border bg-background shadow-2xl">
+          <div className="p-6 md:p-10 space-y-8">
             <DialogHeader>
-              <DialogTitle className="text-2xl font-bold uppercase tracking-tighter">
-                {editingMaterial ? "Edit Resource" : "Add New Resource"}
+              <DialogTitle className="text-2xl font-bold tracking-tight text-foreground">
+                {editingMaterial ? "Refine Resource" : "New Resource Creation"}
               </DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="space-y-2">
-                <Label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Title</Label>
-                <Input 
-                  name="title" 
-                  required 
-                  defaultValue={editingMaterial?.title || ""} 
-                  className="glass border-white/10 rounded-md" 
-                  placeholder="e.g. Next.js Performance Guide" 
-                />
-              </div>
-              <div className="space-y-2">
-                <Label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Category</Label>
-                <Input 
-                  name="category" 
-                  required 
-                  defaultValue={editingMaterial?.category || ""} 
-                  className="glass border-white/10 rounded-md" 
-                  placeholder="e.g. Technical, Design, Guide" 
-                />
-              </div>
-              
-              <FileUpload 
-                label="PDF Document" 
-                accept="application/pdf"
-                currentUrl={fileUrl}
-                onUploadComplete={(url) => setFileUrl(url)}
-              />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-6">
+                  <div className="space-y-2">
+                    <Label className="text-xs font-bold text-muted-foreground ml-1 uppercase tracking-widest">Resource Title</Label>
+                    <Input 
+                      name="title" 
+                      required 
+                      defaultValue={editingMaterial?.title || ""} 
+                      className="h-11 bg-background/50 border-border focus:border-primary/50 focus:ring-primary/10 rounded-xl" 
+                      placeholder="e.g. Next.js Performance Guide" 
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-xs font-bold text-muted-foreground ml-1 uppercase tracking-widest">Category</Label>
+                    <Input 
+                      name="category" 
+                      required 
+                      defaultValue={editingMaterial?.category || ""} 
+                      className="h-11 bg-background/50 border-border focus:border-primary/50 focus:ring-primary/10 rounded-xl" 
+                      placeholder="e.g. Technical, Design, Guide" 
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-xs font-bold text-muted-foreground ml-1 uppercase tracking-widest">Thumbnail URL (Optional)</Label>
+                    <Input 
+                      name="thumbnailUrl" 
+                      defaultValue={editingMaterial?.thumbnailUrl || ""} 
+                      className="h-11 bg-background/50 border-border focus:border-primary/50 focus:ring-primary/10 rounded-xl" 
+                      placeholder="https://res.cloudinary.com/..." 
+                    />
+                  </div>
+                </div>
 
-              <div className="space-y-2">
-                <Label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Thumbnail URL (Optional)</Label>
-                <Input 
-                  name="thumbnailUrl" 
-                  defaultValue={editingMaterial?.thumbnailUrl || ""} 
-                  className="glass border-white/10 rounded-md" 
-                  placeholder="https://res.cloudinary.com/..." 
-                />
+                <div className="space-y-2">
+                   <Label className="text-xs font-bold text-muted-foreground ml-1 uppercase tracking-widest">PDF Document</Label>
+                   <div className="card-premium p-4 bg-background/40">
+                    <FileUpload 
+                      label="" 
+                      accept="application/pdf"
+                      currentUrl={fileUrl}
+                      onUploadComplete={(url) => setFileUrl(url)}
+                    />
+                   </div>
+                </div>
               </div>
-              <div className="flex justify-end gap-4 pt-6 border-t border-white/5">
-                <Button type="button" variant="ghost" onClick={() => setModalOpen(false)} className="rounded-md">Cancel</Button>
-                <Button type="submit" disabled={submitting || !fileUrl} className="bg-primary hover:bg-primary/90 text-white px-8 h-12 font-bold gap-2 rounded-md orange-glow uppercase tracking-widest text-xs">
+
+              <div className="flex items-center justify-end gap-3 pt-6 border-t border-border">
+                <Button type="button" variant="ghost" onClick={() => setModalOpen(false)} className="rounded-xl px-6 h-12 font-bold">Cancel</Button>
+                <Button type="submit" disabled={submitting || !fileUrl} className="bg-primary hover:bg-primary/90 text-primary-foreground px-10 h-12 font-bold gap-2 rounded-full primary-glow shadow-md transition-all active:scale-95">
                   {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-                  {editingMaterial ? "Update Resource" : "Add Resource"}
+                  {editingMaterial ? "Update Resource" : "Publish Resource"}
                 </Button>
               </div>
             </form>

@@ -12,7 +12,8 @@ import {
   Settings, 
   LogOut,
   ChevronRight,
-  Menu
+  Menu,
+  History
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { signOut } from "next-auth/react";
@@ -28,6 +29,7 @@ import { Button } from "@/components/ui/button";
 const menuItems = [
   { name: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
   { name: "Profile", href: "/admin/dashboard/profile", icon: User },
+  { name: "Experience", href: "/admin/dashboard/experience", icon: History },
   { name: "Projects", href: "/admin/dashboard/projects", icon: Briefcase },
   { name: "Materials", href: "/admin/dashboard/materials", icon: FileText },
   { name: "Messages", href: "/admin/dashboard/messages", icon: MessageSquare },

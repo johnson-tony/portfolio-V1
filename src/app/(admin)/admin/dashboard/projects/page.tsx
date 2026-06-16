@@ -140,22 +140,22 @@ export default function ProjectManagement() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div className="space-y-6">
                   <div className="space-y-2">
-                    <Label className="text-xs font-semibold text-foreground ml-1">Project Title</Label>
-                    <Input name="title" defaultValue={editingProject?.title || ""} required className="h-11 bg-muted/50 border-border focus:ring-primary/20" placeholder="e.g. Modern SaaS Platform" />
+                    <Label className="text-xs font-bold text-muted-foreground ml-1 uppercase tracking-widest">Project Title</Label>
+                    <Input name="title" defaultValue={editingProject?.title || ""} required className="h-11 bg-background/50 border-border focus:border-primary/50 focus:ring-primary/10 rounded-xl" placeholder="e.g. Modern SaaS Platform" />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-xs font-semibold text-foreground ml-1">Technologies (Comma separated)</Label>
-                    <Input name="techStack" defaultValue={editingProject?.techStack?.join(", ") || ""} required className="h-11 bg-muted/50 border-border focus:ring-primary/20" placeholder="Next.js, Tailwind, TypeScript..." />
+                    <Label className="text-xs font-bold text-muted-foreground ml-1 uppercase tracking-widest">Technologies (Comma separated)</Label>
+                    <Input name="techStack" defaultValue={editingProject?.techStack?.join(", ") || ""} required className="h-11 bg-background/50 border-border focus:border-primary/50 focus:ring-primary/10 rounded-xl" placeholder="Next.js, Tailwind, TypeScript..." />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-xs font-semibold text-foreground ml-1">Short Description</Label>
-                    <Input name="description" defaultValue={editingProject?.description || ""} required className="h-11 bg-muted/50 border-border focus:ring-primary/20" placeholder="Brief summary of the project" />
+                    <Label className="text-xs font-bold text-muted-foreground ml-1 uppercase tracking-widest">Short Description</Label>
+                    <Input name="description" defaultValue={editingProject?.description || ""} required className="h-11 bg-background/50 border-border focus:border-primary/50 focus:ring-primary/10 rounded-xl" placeholder="Brief summary of the project" />
                   </div>
                 </div>
                 
                 <div className="space-y-2">
-                   <Label className="text-xs font-semibold text-foreground ml-1">Hero Image</Label>
-                   <div className="card-premium p-4 bg-muted/30">
+                   <Label className="text-xs font-bold text-muted-foreground ml-1 uppercase tracking-widest">Hero Image</Label>
+                   <div className="card-premium p-4 bg-background/40">
                     <FileUpload 
                       label="" 
                       currentUrl={imageUrl} 
@@ -166,24 +166,24 @@ export default function ProjectManagement() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs font-semibold text-foreground ml-1">Detailed Case Study</Label>
-                <Textarea name="detailedDescription" defaultValue={editingProject?.detailedDescription} required className="min-h-[160px] bg-muted/50 border-border focus:ring-primary/20 resize-none rounded-xl p-4" placeholder="Deep dive into the problem, solution, and technical challenges..." />
+                <Label className="text-xs font-bold text-muted-foreground ml-1 uppercase tracking-widest">Detailed Case Study</Label>
+                <Textarea name="detailedDescription" defaultValue={editingProject?.detailedDescription} required className="min-h-[160px] bg-background/50 border-border focus:border-primary/50 focus:ring-primary/10 rounded-xl p-4 resize-none transition-all" placeholder="Deep dive into the problem, solution, and technical challenges..." />
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label className="text-xs font-semibold text-foreground ml-1">GitHub Link</Label>
-                  <Input name="githubUrl" defaultValue={editingProject?.githubUrl} className="h-11 bg-muted/50 border-border focus:ring-primary/20" placeholder="https://github.com/..." />
+                  <Label className="text-xs font-bold text-muted-foreground ml-1 uppercase tracking-widest">GitHub Link</Label>
+                  <Input name="githubUrl" defaultValue={editingProject?.githubUrl} className="h-11 bg-background/50 border-border focus:border-primary/50 focus:ring-primary/10 rounded-xl" placeholder="https://github.com/..." />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-xs font-semibold text-foreground ml-1">Live Demo Link</Label>
-                  <Input name="liveDemoUrl" defaultValue={editingProject?.liveDemoUrl} className="h-11 bg-muted/50 border-border focus:ring-primary/20" placeholder="https://demo.com/..." />
+                  <Label className="text-xs font-bold text-muted-foreground ml-1 uppercase tracking-widest">Live Demo Link</Label>
+                  <Input name="liveDemoUrl" defaultValue={editingProject?.liveDemoUrl} className="h-11 bg-background/50 border-border focus:border-primary/50 focus:ring-primary/10 rounded-xl" placeholder="https://demo.com/..." />
                 </div>
               </div>
               
               <div className="flex items-center justify-end gap-3 pt-6 border-t border-border">
-                <Button type="button" variant="ghost" onClick={() => setModalOpen(false)} className="rounded-xl px-6 h-12 font-semibold">Cancel</Button>
-                <Button type="submit" disabled={submitting || !imageUrl} className="bg-primary hover:bg-primary/90 text-white px-10 h-12 font-bold gap-2 rounded-xl primary-glow shadow-lg transition-all active:scale-95">
+                <Button type="button" variant="ghost" onClick={() => setModalOpen(false)} className="rounded-xl px-6 h-12 font-bold">Cancel</Button>
+                <Button type="submit" disabled={submitting || !imageUrl} className="bg-primary hover:bg-primary/90 text-primary-foreground px-10 h-12 font-bold gap-2 rounded-full primary-glow shadow-md transition-all active:scale-95">
                   {submitting ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
                   {editingProject ? "Update Project" : "Publish Project"}
                 </Button>
