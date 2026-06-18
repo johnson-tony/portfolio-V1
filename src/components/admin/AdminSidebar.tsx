@@ -46,21 +46,21 @@ function AdminNavContent({
   onNavigate?: () => void;
 }) {
   return (
-    <div className="flex flex-col h-full bg-[#0A0A0B]">
-      <div className="p-8">
+    <div className="flex flex-col h-full bg-[#2B2D42]">
+      <div className="p-6 mb-2">
         <Link
           href="/"
-          className="text-2xl font-bold tracking-tighter flex items-center gap-2"
+          className="text-xl font-bold tracking-tighter flex items-center gap-3"
           onClick={() => (mobile ? onNavigate?.() : undefined)}
         >
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white">
+          <div className="w-8 h-8 rounded-lg bg-[#8D99AE] flex items-center justify-center text-[#2B2D42]">
             P
           </div>
-          <span className="text-white">Admin</span>
+          <span className="text-[#EDF2F4] uppercase tracking-widest text-sm">Console</span>
         </Link>
       </div>
 
-      <nav className="flex-1 px-4 space-y-2 overflow-y-auto">
+      <nav className="flex-1 px-4 space-y-1 overflow-y-auto">
         {menuItems.map((item) => {
           const isActive = pathname === item.href;
           return (
@@ -69,34 +69,36 @@ function AdminNavContent({
               href={item.href}
               onClick={() => (mobile ? onNavigate?.() : undefined)}
               className={cn(
-                "flex items-center justify-between px-4 py-3 rounded-xl transition-all group",
+                "flex items-center justify-between px-4 py-2.5 rounded-lg transition-all group",
                 isActive
-                  ? "bg-primary/10 text-primary border border-primary/20"
-                  : "text-gray-500 hover:text-white hover:bg-white/5",
+                  ? "bg-[#34384F] text-[#EDF2F4] border border-[rgba(141,153,174,0.1)]"
+                  : "text-[#8D99AE] hover:text-[#EDF2F4] hover:bg-[#34384F]/50",
               )}
             >
               <div className="flex items-center gap-3">
                 <item.icon
                   className={cn(
-                    "w-5 h-5",
-                    isActive ? "text-primary" : "text-gray-500 group-hover:text-white",
+                    "w-4 h-4",
+                    isActive ? "text-[#8D99AE]" : "text-[#8D99AE] group-hover:text-[#EDF2F4]",
                   )}
                 />
-                <span className="font-medium">{item.name}</span>
+                <span className="text-[13px] font-bold uppercase tracking-wider">{item.name}</span>
               </div>
-              {isActive && <ChevronRight className="w-4 h-4" />}
+              {isActive && (
+                <div className="w-1.5 h-1.5 rounded-full bg-[#8D99AE]" />
+              )}
             </Link>
           );
         })}
       </nav>
 
-      <div className="p-4 border-t border-white/5">
+      <div className="p-4 border-t border-[rgba(141,153,174,0.05)]">
         <button
           onClick={() => signOut({ callbackUrl: "/" })}
-          className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-gray-500 hover:text-red-400 hover:bg-red-400/10 transition-all"
+          className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-[#8D99AE] hover:text-[#EF233C] hover:bg-[#EF233C]/5 transition-all group"
         >
-          <LogOut className="w-5 h-5" />
-          <span className="font-medium">Logout</span>
+          <LogOut className="w-4 h-4" />
+          <span className="text-[13px] font-bold uppercase tracking-wider">Logout</span>
         </button>
       </div>
     </div>
@@ -110,16 +112,16 @@ export default function AdminSidebar() {
   return (
     <>
       {/* Mobile Trigger */}
-      <div className="lg:hidden fixed top-5 left-4 z-[60]">
+      <div className="lg:hidden fixed top-3 left-4 z-[60]">
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger
             render={
-              <Button variant="outline" size="icon" className="glass border-white/10 text-white rounded-xl w-10 h-10">
+              <Button variant="outline" size="icon" className="bg-[#2B2D42] border-[rgba(141,153,174,0.2)] text-[#EDF2F4] rounded-lg w-10 h-10 shadow-lg">
                 <Menu className="w-5 h-5" />
               </Button>
             }
           />
-          <SheetContent side="left" className="p-0 w-64 border-r border-white/5 bg-[#0A0A0B]">
+          <SheetContent side="left" className="p-0 w-64 border-r border-[rgba(141,153,174,0.1)] bg-[#2B2D42]">
             <SheetHeader className="sr-only">
               <SheetTitle>Admin Navigation</SheetTitle>
             </SheetHeader>
@@ -129,7 +131,7 @@ export default function AdminSidebar() {
       </div>
 
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex w-64 h-screen fixed left-0 top-0 bg-[#0A0A0B] border-r border-white/5 flex-col z-50">
+      <aside className="hidden lg:flex w-64 h-screen fixed left-0 top-0 bg-[#2B2D42] border-r border-[rgba(141,153,174,0.1)] flex-col z-50">
         <AdminNavContent pathname={pathname} />
       </aside>
     </>

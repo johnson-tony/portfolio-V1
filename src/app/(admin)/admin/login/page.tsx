@@ -54,15 +54,13 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 sm:p-6 bg-[#0A0A0B] relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center p-4 sm:p-6 bg-[#1F2233] relative overflow-hidden">
       {/* Background decoration */}
-      <div
-        className="absolute top-0 left-0 w-full h-full z-0 opacity-20"
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none" 
         style={{
-          backgroundImage:
-            "radial-gradient(circle at 50% 50%, #F97316 0%, transparent 50%)",
-          backgroundSize: "100% 100%",
-        }}
+          backgroundImage: `radial-gradient(circle at 2px 2px, #8D99AE 1px, transparent 0)`,
+          backgroundSize: '32px 32px'
+        }} 
       />
 
       <motion.div
@@ -70,68 +68,68 @@ export default function AdminLogin() {
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-md relative z-10"
       >
-        <div className="text-center mb-4">
-          <div className="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4 orange-glow">
-            <Lock className="text-white w-8 h-8" />
+        <div className="text-center mb-8">
+          <div className="w-14 h-14 bg-[#2B2D42] border border-[rgba(141,153,174,0.1)] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-xl">
+            <Lock className="text-[#8D99AE] w-6 h-6" />
           </div>
-          <h1 className="text-3xl font-bold tracking-tighter text-white uppercase">Admin Access</h1>
-          <p className="text-gray-400 mt-2 text-sm">Enter your credentials to manage your portfolio.</p>
+          <h1 className="text-2xl font-bold tracking-tight text-[#EDF2F4] uppercase">Console Access</h1>
+          <p className="text-[#8D99AE] mt-2 text-sm font-medium">Authentication required for administrative operations.</p>
         </div>
 
-        <div className="glass-dark p-6 sm:p-10 rounded-3xl border border-white/10 shadow-2xl">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 sm:space-y-8">
+        <div className="bg-[#34384F] p-8 sm:p-12 rounded-[24px] border border-[rgba(141,153,174,0.1)] shadow-2xl">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
             <div className="space-y-2">
-              <Label htmlFor="username" className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Username</Label>
+              <Label htmlFor="username" className="text-[10px] font-bold uppercase tracking-widest text-[#8D99AE] ml-1">Identity Token</Label>
               <Input
                 id="username"
                 type="text"
-                placeholder="Enter username"
-                className="bg-transparent border border-white/10 hover:border-primary/40 hover:ring-2 hover:ring-primary/15 focus:border-primary/60 focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-0 placeholder:text-gray-500"
+                placeholder="Username"
+                className="bg-[#2B2D42] border-[rgba(141,153,174,0.1)] focus:border-[#8D99AE]/50 focus:ring-0 text-[#EDF2F4] h-12 rounded-xl transition-all"
                 aria-invalid={Boolean(errors.username)}
                 {...register("username")}
               />
               {errors.username?.message ? (
-                <p className="text-red-400 text-xs">{errors.username.message}</p>
+                <p className="text-[#EF233C] text-[10px] font-bold uppercase mt-1 ml-1">{errors.username.message}</p>
               ) : null}
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Password</Label>
+              <Label htmlFor="password" className="text-[10px] font-bold uppercase tracking-widest text-[#8D99AE] ml-1">Security Key</Label>
               <div className="relative">
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="Enter password"
-                  className="bg-transparent border border-white/10 hover:border-primary/40 hover:ring-2 hover:ring-primary/15 focus:border-primary/60 focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-0 placeholder:text-gray-500 [&::-ms-reveal]:hidden [&::-ms-clear]:hidden"
+                  placeholder="Password"
+                  className="bg-[#2B2D42] border-[rgba(141,153,174,0.1)] focus:border-[#8D99AE]/50 focus:ring-0 text-[#EDF2F4] h-12 rounded-xl transition-all"
                   aria-invalid={Boolean(errors.password)}
                   {...register("password")}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 rounded-md"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[#8D99AE] hover:text-[#EDF2F4] transition-colors"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
               {errors.password?.message ? (
-                <p className="text-red-400 text-xs">{errors.password.message}</p>
+                <p className="text-[#EF233C] text-[10px] font-bold uppercase mt-1 ml-1">{errors.password.message}</p>
               ) : null}
             </div>
 
             <Button
               type="submit"
               disabled={loading}
-              className="w-full h-12 bg-primary hover:bg-primary/90 text-white rounded-2xl font-bold text-sm orange-glow uppercase tracking-widest transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-0"
+              className="w-full h-12 bg-[#8D99AE] hover:bg-[#8D99AE]/90 text-[#1F2233] rounded-xl font-bold uppercase tracking-widest text-xs transition-all active:scale-95 shadow-xl"
             >
-              {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Access Dashboard"}
+              {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Authenticate"}
             </Button>
           </form>
         </div>
         
-        <div className="text-center mt-8">
-          <Button variant="link" className="text-gray-500 hover:text-white" onClick={() => router.push("/")}>
-            ← Back to Public Site
+        <div className="text-center mt-10">
+          <Button variant="link" className="text-[#8D99AE] hover:text-[#EDF2F4] text-xs font-bold uppercase tracking-widest" onClick={() => router.push("/")}>
+            ← Exit to Root
           </Button>
         </div>
       </motion.div>

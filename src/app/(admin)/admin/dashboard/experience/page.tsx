@@ -85,57 +85,61 @@ export default function ExperienceManagement() {
   if (loading) return <div className="flex items-center justify-center h-64"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>;
 
   return (
-    <div className="space-y-8">
-      <div className="flex items-center justify-between gap-4">
+    <div className="space-y-10">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">Experience Management</h1>
-          <p className="text-muted-foreground mt-1">Add, edit, or remove professional experiences from your timeline.</p>
+          <h1 className="text-2xl font-bold tracking-tight text-[#EDF2F4]">Experience Inventory</h1>
+          <p className="text-[#8D99AE] text-sm mt-1">Manage professional timeline sequences and historical records.</p>
         </div>
-        <Button onClick={() => openModal()} className="h-11 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full primary-glow gap-2 font-bold px-6 active:scale-95 transition-all">
-          <Plus className="w-5 h-5" /> Add Experience
+        <Button onClick={() => openModal()} className="h-11 bg-[#8D99AE] hover:bg-[#8D99AE]/90 text-[#1F2233] rounded-xl gap-2 font-bold px-6 shadow-xl transition-all active:scale-95">
+          <Plus className="w-5 h-5" /> Add New Sequence
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {experiences.map((exp) => (
-          <div key={exp._id} className="card-premium flex flex-col group relative">
-            <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300">
-              <Button size="icon" variant="secondary" onClick={() => openModal(exp)} className="rounded-xl h-9 w-9">
+          <div key={exp._id} className="card-premium flex flex-col group relative p-8">
+            <div className="absolute top-6 right-6 flex gap-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
+              <Button size="icon" variant="ghost" onClick={() => openModal(exp)} className="bg-[#2B2D42] text-[#8D99AE] hover:text-[#EDF2F4] rounded-lg h-9 w-9 border border-[rgba(141,153,174,0.1)]">
                 <Pencil className="w-4 h-4" />
               </Button>
-              <Button size="icon" variant="destructive" onClick={() => handleDelete(exp._id)} className="rounded-xl h-9 w-9">
+              <Button size="icon" variant="ghost" onClick={() => handleDelete(exp._id)} className="bg-[#2B2D42] text-[#8D99AE] hover:text-[#EF233C] rounded-lg h-9 w-9 border border-[rgba(141,153,174,0.1)]">
                 <Trash2 className="w-4 h-4" />
               </Button>
             </div>
             
-            <div className="space-y-4">
-              <div className="flex flex-col gap-1">
-                <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">{exp.position}</h3>
-                <span className="text-primary font-bold text-sm">{exp.company}</span>
+            <div className="space-y-6">
+              <div className="flex flex-col gap-2">
+                <h3 className="text-xl font-bold text-[#EDF2F4] group-hover:text-[#8D99AE] transition-colors pr-16">{exp.position}</h3>
+                <div className="flex items-center gap-2">
+                  <span className="text-[#8D99AE] font-bold text-xs uppercase tracking-widest">{exp.company}</span>
+                </div>
               </div>
               
-              <div className="flex flex-wrap gap-4 text-xs text-muted-foreground">
-                <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/5 border border-primary/10 text-primary font-bold uppercase tracking-wider">
-                  <Calendar className="w-3 h-3" />
+              <div className="flex flex-wrap gap-4 text-[10px] text-[#8D99AE] font-bold uppercase tracking-widest">
+                <div className="flex items-center gap-2 px-3 py-1 bg-[#2B2D42] rounded-md border border-[rgba(141,153,174,0.1)]">
+                  <Calendar className="w-3.5 h-3.5" />
                   {exp.period}
                 </div>
                 {exp.location && (
-                  <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-muted border border-border text-muted-foreground font-bold uppercase tracking-wider">
-                    <MapPin className="w-3 h-3" />
+                  <div className="flex items-center gap-2 px-3 py-1 bg-[#2B2D42] rounded-md border border-[rgba(141,153,174,0.1)]">
+                    <MapPin className="w-3.5 h-3.5" />
                     {exp.location}
                   </div>
                 )}
               </div>
 
-              <p className="text-muted-foreground text-[14px] line-clamp-3 leading-relaxed">
-                {exp.description}
-              </p>
+              <div className="bg-[#2B2D42] p-6 rounded-xl border border-[rgba(141,153,174,0.05)]">
+                <p className="text-[#8D99AE] text-[13px] line-clamp-4 leading-relaxed font-medium">
+                  {exp.description}
+                </p>
+              </div>
             </div>
           </div>
         ))}
         {experiences.length === 0 && (
-          <div className="md:col-span-2 text-center py-20 border-2 border-dashed border-border rounded-3xl text-muted-foreground font-medium">
-            No professional experiences added yet.
+          <div className="md:col-span-2 text-center py-32 bg-[#2B2D42]/20 border-2 border-dashed border-[rgba(141,153,174,0.1)] rounded-3xl text-[#8D99AE] font-bold uppercase tracking-widest text-xs">
+            No professional sequences registered in system.
           </div>
         )}
       </div>
@@ -145,48 +149,48 @@ export default function ExperienceManagement() {
           <div className="p-6 md:p-10 space-y-8">
             <DialogHeader>
               <DialogTitle className="text-2xl font-bold tracking-tight text-foreground">
-                {editingExperience ? "Refine Experience" : "New Experience Details"}
+                {editingExperience ? "Refine Sequence" : "New Sequence Initialization"}
               </DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-6">
                   <div className="space-y-2">
-                    <Label className="text-xs font-bold text-muted-foreground ml-1 uppercase tracking-widest">Company Name</Label>
-                    <Input name="company" defaultValue={editingExperience?.company || ""} required className="h-11 bg-background/50 border-border focus:border-primary/50 focus:ring-primary/10 rounded-xl" placeholder="e.g. Google" />
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-[#8D99AE] ml-1">Entity Name</Label>
+                    <Input name="company" defaultValue={editingExperience?.company || ""} required className="h-11 bg-[#2B2D42] border-[rgba(141,153,174,0.1)] focus:border-[#8D99AE]/50 focus:ring-0 rounded-xl" placeholder="e.g. Google" />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-xs font-bold text-muted-foreground ml-1 uppercase tracking-widest">Position / Title</Label>
-                    <Input name="position" defaultValue={editingExperience?.position || ""} required className="h-11 bg-background/50 border-border focus:border-primary/50 focus:ring-primary/10 rounded-xl" placeholder="e.g. Senior Software Engineer" />
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-[#8D99AE] ml-1">Professional Title</Label>
+                    <Input name="position" defaultValue={editingExperience?.position || ""} required className="h-11 bg-[#2B2D42] border-[rgba(141,153,174,0.1)] focus:border-[#8D99AE]/50 focus:ring-0 rounded-xl" placeholder="e.g. Senior Software Engineer" />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-xs font-bold text-muted-foreground ml-1 uppercase tracking-widest">Period</Label>
-                    <Input name="period" defaultValue={editingExperience?.period || ""} required className="h-11 bg-background/50 border-border focus:border-primary/50 focus:ring-primary/10 rounded-xl" placeholder="e.g. Jan 2022 - Present" />
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-[#8D99AE] ml-1">Chronological Period</Label>
+                    <Input name="period" defaultValue={editingExperience?.period || ""} required className="h-11 bg-[#2B2D42] border-[rgba(141,153,174,0.1)] focus:border-[#8D99AE]/50 focus:ring-0 rounded-xl" placeholder="e.g. Jan 2022 - Present" />
                   </div>
                 </div>
 
                 <div className="space-y-6">
                   <div className="space-y-2">
-                    <Label className="text-xs font-bold text-muted-foreground ml-1 uppercase tracking-widest">Location</Label>
-                    <Input name="location" defaultValue={editingExperience?.location || ""} className="h-11 bg-background/50 border-border focus:border-primary/50 focus:ring-primary/10 rounded-xl" placeholder="e.g. Remote / New York, NY" />
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-[#8D99AE] ml-1">Geographical Location</Label>
+                    <Input name="location" defaultValue={editingExperience?.location || ""} className="h-11 bg-[#2B2D42] border-[rgba(141,153,174,0.1)] focus:border-[#8D99AE]/50 focus:ring-0 rounded-xl" placeholder="e.g. Remote / New York, NY" />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-xs font-bold text-muted-foreground ml-1 uppercase tracking-widest">Display Order</Label>
-                    <Input name="order" type="number" defaultValue={editingExperience?.order || 0} className="h-11 bg-background/50 border-border focus:border-primary/50 focus:ring-primary/10 rounded-xl" />
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-[#8D99AE] ml-1">Sequential Priority</Label>
+                    <Input name="order" type="number" defaultValue={editingExperience?.order || 0} className="h-11 bg-[#2B2D42] border-[rgba(141,153,174,0.1)] focus:border-[#8D99AE]/50 focus:ring-0 rounded-xl" />
                   </div>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs font-bold text-muted-foreground ml-1 uppercase tracking-widest">Key Responsibilities / Achievements</Label>
-                <Textarea name="description" defaultValue={editingExperience?.description || ""} required className="min-h-[160px] bg-background/50 border-border focus:border-primary/50 focus:ring-primary/10 rounded-xl p-4 resize-none transition-all" placeholder="Describe your role and impact..." />
+                <Label className="text-[10px] font-bold uppercase tracking-widest text-[#8D99AE] ml-1">Key Responsibilities / Impact Summary</Label>
+                <Textarea name="description" defaultValue={editingExperience?.description || ""} required className="min-h-[160px] bg-[#2B2D42] border-[rgba(141,153,174,0.1)] focus:border-[#8D99AE]/50 focus:ring-0 rounded-xl p-4 resize-none transition-all" placeholder="Describe role and operational impact..." />
               </div>
               
-              <div className="flex items-center justify-end gap-3 pt-6 border-t border-border">
-                <Button type="button" variant="ghost" onClick={() => setModalOpen(false)} className="rounded-xl px-6 h-12 font-bold">Cancel</Button>
-                <Button type="submit" disabled={submitting} className="bg-primary hover:bg-primary/90 text-primary-foreground px-10 h-12 font-bold gap-2 rounded-full primary-glow shadow-md transition-all active:scale-95">
+              <div className="flex items-center justify-end gap-3 pt-6 border-t border-[rgba(141,153,174,0.1)]">
+                <Button type="button" variant="ghost" onClick={() => setModalOpen(false)} className="rounded-xl px-6 h-12 font-bold text-[#8D99AE] hover:bg-[#2B2D42]">CANCEL</Button>
+                <Button type="submit" disabled={submitting} className="bg-[#8D99AE] hover:bg-[#8D99AE]/90 text-[#1F2233] px-10 h-12 font-bold gap-3 rounded-xl shadow-xl transition-all active:scale-95">
                   {submitting ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
-                  {editingExperience ? "Update Experience" : "Save Experience"}
+                  {editingExperience ? "REDEFINE SEQUENCE" : "INITIALIZE SEQUENCE"}
                 </Button>
               </div>
             </form>

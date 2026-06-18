@@ -15,21 +15,23 @@ export default async function AdminDashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-[#0A0A0B] text-white">
+    <div className="admin-panel min-h-screen bg-[#1F2233] text-[#EDF2F4]">
       <AdminSidebar />
       <div className="lg:pl-64 transition-all duration-300">
-        <header className="h-20 border-b border-white/5 flex items-center justify-between px-4 md:px-8 bg-[#0A0A0B]/50 backdrop-blur-md sticky top-0 z-40">
+        <header className="h-16 border-b border-[rgba(141,153,174,0.15)] flex items-center justify-between px-4 md:px-8 bg-[#1F2233] sticky top-0 z-40">
           <div className="flex items-center gap-4">
-            <h2 className="text-xl font-semibold ml-12 lg:ml-0">Dashboard</h2>
+            <h2 className="text-lg font-bold tracking-tight ml-12 lg:ml-0 text-[#EDF2F4]">Overview</h2>
           </div>
           <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-400 hidden sm:inline-block">Welcome, <span className="text-white font-medium">{session.user?.name}</span></span>
-            <div className="w-10 h-10 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center text-primary font-bold">
+            <span className="text-xs font-bold uppercase tracking-widest text-[#8D99AE] hidden sm:inline-block">
+              Welcome, <span className="text-[#EDF2F4]">{session.user?.name}</span>
+            </span>
+            <div className="w-8 h-8 rounded-lg bg-[#2B2D42] border border-[rgba(141,153,174,0.3)] flex items-center justify-center text-[#8D99AE] font-bold text-xs">
               {session.user?.name?.[0].toUpperCase()}
             </div>
           </div>
         </header>
-        <main className="p-4 md:p-8">
+        <main className="p-6 md:p-10">
           {children}
         </main>
       </div>

@@ -48,25 +48,25 @@
 
 :root {
   /* Premium Elegant Light Theme */
-  --background: #F8F9FB;
+  --background: #f4f4f4;
   --foreground: #0F172A;
-  --card: #FFFFFF;
+  --card: #fbffff;
   --card-foreground: #0F172A;
   --popover: #FFFFFF;
   --popover-foreground: #0F172A;
-  --primary: #71A5DE;
+  --primary: #1ccef2;
   --primary-foreground: #FFFFFF;
-  --secondary: #83B0E1;
+  --secondary: #9be8f8;
   --secondary-foreground: #0F172A;
   --muted: #F1F5F9;
   --muted-foreground: #64748B;
-  --accent: #AECBEB;
+  --accent: #93ceda;
   --accent-foreground: #0F172A;
   --destructive: #EF4444;
   --destructive-foreground: #FFFFFF;
-  --border: #71A5DE;
+  --border: #5fb2b1;
   --input: #E2E8F0;
-  --ring: #71A5DE;
+  --ring: #076679;
   --radius: 18px;
 
   --glass-bg: rgba(255, 255, 255, 0.7);
@@ -190,4 +190,58 @@
   ::-webkit-scrollbar-thumb {
     @apply rounded-full bg-border/20 hover:bg-muted-foreground/30 transition-colors;
   }
+}
+
+/* Admin Dashboard SaaS Theme - Scoped to .admin-panel */
+.admin-panel {
+  --background: #1F2233;
+  --foreground: #EDF2F4;
+  --card: #34384F;
+  --card-foreground: #EDF2F4;
+  --popover: #2B2D42;
+  --popover-foreground: #EDF2F4;
+  --primary: #8D99AE;
+  --primary-foreground: #1F2233;
+  --secondary: #2B2D42;
+  --secondary-foreground: #EDF2F4;
+  --muted: #2B2D42;
+  --muted-foreground: #8D99AE;
+  --accent: #34384F;
+  --accent-foreground: #EDF2F4;
+  --destructive: #EF233C;
+  --destructive-foreground: #EDF2F4;
+  --border: rgba(141, 153, 174, 0.15);
+  --input: #2B2D42;
+  --ring: #8D99AE;
+  --radius: 16px;
+
+  /* Sidebar specific */
+  --sidebar-bg: #2B2D42;
+  --sidebar-foreground: #EDF2F4;
+  --sidebar-muted: #8D99AE;
+}
+
+.admin-panel body {
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
+}
+
+.admin-panel .card-premium {
+  background: var(--card) !important;
+  border-color: var(--border) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+  backdrop-blur: none !important;
+}
+
+.admin-panel .card-premium:hover {
+  transform: translateY(-2px) !important;
+}
+
+.admin-panel h1, .admin-panel h2, .admin-panel h3 {
+  color: var(--foreground) !important;
+}
+
+.admin-panel p {
+  color: var(--muted-foreground) !important;
 }

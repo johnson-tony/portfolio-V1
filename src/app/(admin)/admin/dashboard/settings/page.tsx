@@ -55,53 +55,57 @@ export default function SettingsManagement() {
   if (loading) return <div className="flex items-center justify-center h-64"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>;
 
   return (
-    <div className="max-w-4xl space-y-8">
+    <div className="max-w-4xl space-y-10">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">System Settings</h1>
-        <p className="text-muted-foreground mt-1">Configure your portfolio's global branding and content.</p>
+        <h1 className="text-2xl font-bold tracking-tight text-[#EDF2F4]">System Settings</h1>
+        <p className="text-[#8D99AE] text-sm mt-1">Global configuration for application branding and core content.</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-8">
+      <form onSubmit={handleSubmit} className="space-y-10">
         {/* Branding */}
-        <div className="card-premium p-8 space-y-6">
-          <h3 className="text-xl font-bold flex items-center gap-2 border-b border-border pb-4">
-            <Globe className="w-5 h-5 text-primary" />
-            General Branding
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="card-premium p-8 space-y-8">
+           <div className="flex items-center gap-3 mb-2">
+            <div className="w-8 h-8 rounded-lg bg-[#2B2D42] border border-[rgba(141,153,174,0.1)] flex items-center justify-center text-[#8D99AE]">
+              <Globe className="w-4 h-4" />
+            </div>
+            <h3 className="text-lg font-bold text-[#EDF2F4]">Infrastructure Branding</h3>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="space-y-2">
-              <Label className="text-xs font-semibold text-foreground">Site Title</Label>
-              <Input name="siteTitle" defaultValue={settings?.siteTitle || ""} className="h-11 bg-muted/50 border-border focus:ring-primary/20" />
+              <Label className="text-[10px] font-bold uppercase tracking-widest text-[#8D99AE] ml-1">Application Title</Label>
+              <Input name="siteTitle" defaultValue={settings?.siteTitle || ""} className="h-11 bg-[#2B2D42] border-[rgba(141,153,174,0.1)] focus:border-[#8D99AE]/50 focus:ring-0 rounded-xl transition-all" />
             </div>
             <div className="space-y-2">
-              <Label className="text-xs font-semibold text-foreground">Logo URL (Cloudinary)</Label>
-              <Input name="logoUrl" defaultValue={settings?.logoUrl || ""} className="h-11 bg-muted/50 border-border focus:ring-primary/20" />
+              <Label className="text-[10px] font-bold uppercase tracking-widest text-[#8D99AE] ml-1">Logo Resource URL</Label>
+              <Input name="logoUrl" defaultValue={settings?.logoUrl || ""} className="h-11 bg-[#2B2D42] border-[rgba(141,153,174,0.1)] focus:border-[#8D99AE]/50 focus:ring-0 rounded-xl transition-all" />
             </div>
           </div>
         </div>
 
         {/* Hero Content */}
-        <div className="card-premium p-8 space-y-6">
-          <h3 className="text-xl font-bold flex items-center gap-2 border-b border-border pb-4">
-            <Layout className="w-5 h-5 text-primary" />
-            Hero Section Content
-          </h3>
-          <div className="space-y-4">
+        <div className="card-premium p-8 space-y-8">
+           <div className="flex items-center gap-3 mb-2">
+            <div className="w-8 h-8 rounded-lg bg-[#2B2D42] border border-[rgba(141,153,174,0.1)] flex items-center justify-center text-[#8D99AE]">
+              <Layout className="w-4 h-4" />
+            </div>
+            <h3 className="text-lg font-bold text-[#EDF2F4]">Homepage Configuration</h3>
+          </div>
+          <div className="space-y-6">
             <div className="space-y-2">
-              <Label className="text-xs font-semibold text-foreground">Hero Heading</Label>
-              <Input name="heroHeading" defaultValue={settings?.heroHeading || ""} className="h-11 bg-muted/50 border-border focus:ring-primary/20" />
+              <Label className="text-[10px] font-bold uppercase tracking-widest text-[#8D99AE] ml-1">Primary Hero Heading</Label>
+              <Input name="heroHeading" defaultValue={settings?.heroHeading || ""} className="h-11 bg-[#2B2D42] border-[rgba(141,153,174,0.1)] focus:border-[#8D99AE]/50 focus:ring-0 rounded-xl transition-all" />
             </div>
             <div className="space-y-2">
-              <Label className="text-xs font-semibold text-foreground">Hero Subheading</Label>
-              <Input name="heroSubheading" defaultValue={settings?.heroSubheading || ""} className="h-11 bg-muted/50 border-border focus:ring-primary/20" />
+              <Label className="text-[10px] font-bold uppercase tracking-widest text-[#8D99AE] ml-1">Secondary Subheading</Label>
+              <Input name="heroSubheading" defaultValue={settings?.heroSubheading || ""} className="h-11 bg-[#2B2D42] border-[rgba(141,153,174,0.1)] focus:border-[#8D99AE]/50 focus:ring-0 rounded-xl transition-all" />
             </div>
           </div>
         </div>
 
-        <div className="flex justify-end">
-          <Button type="submit" disabled={updating} className="h-12 px-8 bg-primary hover:bg-primary/90 text-white font-bold rounded-xl primary-glow shadow-lg transition-all active:scale-95 gap-2">
+        <div className="flex justify-end pt-4">
+          <Button type="submit" disabled={updating} className="h-12 px-12 bg-[#8D99AE] hover:bg-[#8D99AE]/90 text-[#1F2233] font-bold rounded-xl shadow-xl transition-all active:scale-95 gap-3">
             {updating ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
-            Save System Settings
+            COMMIT SETTINGS
           </Button>
         </div>
       </form>

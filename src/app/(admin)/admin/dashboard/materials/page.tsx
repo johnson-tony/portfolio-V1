@@ -101,78 +101,80 @@ export default function MaterialsManagement() {
   if (loading) return <div className="flex items-center justify-center h-64"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>;
 
   return (
-    <div className="space-y-8">
-      <div className="flex items-center justify-between">
+    <div className="space-y-10">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Resource Management</h1>
-          <p className="text-gray-500 mt-1">Manage PDF guides and technical resources.</p>
+          <h1 className="text-2xl font-bold tracking-tight text-[#EDF2F4]">Resource Management</h1>
+          <p className="text-[#8D99AE] text-sm mt-1">Audit and maintain your technical library and guides.</p>
         </div>
-        <Button onClick={() => openModal()} className="h-12 bg-primary hover:bg-primary/90 text-white rounded-md orange-glow gap-2 font-bold px-6">
-          <Plus className="w-5 h-5" /> Add New Material
+        <Button onClick={() => openModal()} className="h-11 bg-[#8D99AE] hover:bg-[#8D99AE]/90 text-[#1F2233] rounded-xl gap-2 font-bold px-6 shadow-xl transition-all active:scale-95">
+          <Plus className="w-5 h-5" /> Add New Entry
         </Button>
       </div>
 
       <div className="relative max-w-md">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#8D99AE] w-4 h-4" />
         <Input 
-          placeholder="Filter resources..." 
-          className="h-12 pl-12 glass border-white/10 rounded-md"
+          placeholder="Filter technical resources..." 
+          className="h-11 pl-11 bg-[#2B2D42] border-[rgba(141,153,174,0.1)] focus:border-[#8D99AE]/50 focus:ring-0 rounded-xl text-sm"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
 
-      <div className="glass-dark rounded-2xl border border-white/5 overflow-hidden">
-        <table className="w-full text-left">
-          <thead>
-            <tr className="border-b border-white/5 bg-white/5">
-              <th className="px-6 py-4 font-bold text-sm uppercase tracking-widest text-gray-500">Resource</th>
-              <th className="px-6 py-4 font-bold text-sm uppercase tracking-widest text-gray-500">Category</th>
-              <th className="px-6 py-4 font-bold text-sm uppercase tracking-widest text-gray-500 text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-white/5">
-            {filteredMaterials.map((item) => (
-              <tr key={item._id} className="hover:bg-white/[0.02] transition-colors group">
-                <td className="px-6 py-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-md bg-primary/10 flex items-center justify-center text-primary">
-                      <FileText className="w-5 h-5" />
-                    </div>
-                    <span className="font-medium text-white">{item.title}</span>
-                  </div>
-                </td>
-                <td className="px-6 py-4">
-                  <span className="px-3 py-1 rounded-md bg-white/5 border border-white/10 text-[10px] font-bold uppercase tracking-widest text-gray-400">
-                    {item.category}
-                  </span>
-                </td>
-                <td className="px-6 py-4 text-right">
-                  <div className="flex justify-end gap-2">
-                    <Button 
-                      size="icon" 
-                      variant="ghost" 
-                      onClick={() => openModal(item)}
-                      className="text-gray-500 hover:text-white hover:bg-white/10 rounded-md"
-                    >
-                      <Pencil className="w-4 h-4" />
-                    </Button>
-                    <Button 
-                      size="icon" 
-                      variant="ghost" 
-                      onClick={() => handleDelete(item._id)}
-                      className="text-gray-500 hover:text-red-400 hover:bg-red-400/10 rounded-md"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </td>
+      <div className="bg-[#34384F] rounded-2xl border border-[rgba(141,153,174,0.1)] overflow-hidden shadow-2xl">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left">
+            <thead>
+              <tr className="border-b border-[rgba(141,153,174,0.1)] bg-[#2B2D42]/50">
+                <th className="px-8 py-4 font-bold text-[11px] uppercase tracking-widest text-[#8D99AE]">Resource Description</th>
+                <th className="px-8 py-4 font-bold text-[11px] uppercase tracking-widest text-[#8D99AE]">Taxonomy</th>
+                <th className="px-8 py-4 font-bold text-[11px] uppercase tracking-widest text-[#8D99AE] text-right">Administrative Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-[rgba(141,153,174,0.05)]">
+              {filteredMaterials.map((item) => (
+                <tr key={item._id} className="hover:bg-[#2B2D42]/30 transition-colors group">
+                  <td className="px-8 py-5">
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 rounded-xl bg-[#2B2D42] border border-[rgba(141,153,174,0.1)] flex items-center justify-center text-[#8D99AE]">
+                        <FileText className="w-5 h-5" />
+                      </div>
+                      <span className="font-bold text-sm text-[#EDF2F4]">{item.title}</span>
+                    </div>
+                  </td>
+                  <td className="px-8 py-5">
+                    <span className="px-3 py-1 rounded-md bg-[#2B2D42] border border-[rgba(141,153,174,0.1)] text-[10px] font-bold uppercase tracking-widest text-[#8D99AE]">
+                      {item.category}
+                    </span>
+                  </td>
+                  <td className="px-8 py-5 text-right">
+                    <div className="flex justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Button 
+                        size="icon" 
+                        variant="ghost" 
+                        onClick={() => openModal(item)}
+                        className="text-[#8D99AE] hover:text-[#EDF2F4] hover:bg-[#2B2D42] rounded-lg h-9 w-9"
+                      >
+                        <Pencil className="w-4 h-4" />
+                      </Button>
+                      <Button 
+                        size="icon" 
+                        variant="ghost" 
+                        onClick={() => handleDelete(item._id)}
+                        className="text-[#8D99AE] hover:text-[#EF233C] hover:bg-[#EF233C]/10 rounded-lg h-9 w-9"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
         {filteredMaterials.length === 0 && (
-          <div className="py-20 text-center text-gray-500">No resources found.</div>
+          <div className="py-24 text-center text-[#8D99AE] font-bold uppercase tracking-widest text-xs">No matching resources in system.</div>
         )}
       </div>
 

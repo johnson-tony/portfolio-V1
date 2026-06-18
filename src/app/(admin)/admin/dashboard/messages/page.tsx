@@ -58,63 +58,71 @@ export default function MessagesManagement() {
   if (loading) return <div className="flex items-center justify-center h-64"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>;
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">Inbound Messages</h1>
-        <p className="text-muted-foreground mt-1">Review and manage communications from your portfolio visitors.</p>
+    <div className="space-y-10">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-[#EDF2F4]">Communications</h1>
+          <p className="text-[#8D99AE] text-sm mt-1">Audit and respond to inbound inquiries from portfolio engagement.</p>
+        </div>
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#34384F] border border-[rgba(141,153,174,0.1)] text-[#8D99AE] text-[10px] font-bold uppercase tracking-widest">
+           {messages.filter(m => !m.isRead).length} Unread Sequences
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-4">
+      <div className="grid grid-cols-1 gap-6">
         {messages.map((msg) => (
           <div 
             key={msg._id} 
             className={cn(
-              "card-premium p-6 flex flex-col md:flex-row justify-between gap-6 transition-all",
-              !msg.isRead && "border-primary/30 ring-1 ring-primary/10 bg-primary/5"
+              "card-premium p-8 flex flex-col md:flex-row justify-between gap-8 transition-all group",
+              !msg.isRead && "border-[#8D99AE]/30 bg-[#34384F]/80"
             )}
           >
-            <div className="space-y-4 flex-1">
-              <div className="flex items-center gap-3">
+            <div className="space-y-6 flex-1">
+              <div className="flex items-center gap-4">
                 <div className={cn(
-                  "w-12 h-12 rounded-xl flex items-center justify-center shadow-sm",
-                  msg.isRead ? "bg-muted text-muted-foreground" : "bg-primary text-white primary-glow"
+                  "w-12 h-12 rounded-xl flex items-center justify-center border border-[rgba(141,153,174,0.1)]",
+                  msg.isRead ? "bg-[#2B2D42] text-[#8D99AE]" : "bg-[#8D99AE] text-[#1F2233]"
                 )}>
                   <Mail className="w-5 h-5" />
                 </div>
                 <div className="min-w-0">
-                  <h3 className="font-bold text-lg text-foreground truncate">{msg.name}</h3>
-                  <p className="text-sm text-muted-foreground truncate">{msg.email}</p>
+                  <h3 className="font-bold text-lg text-[#EDF2F4] truncate">{msg.name}</h3>
+                  <p className="text-[13px] font-bold text-[#8D99AE] truncate uppercase tracking-tight">{msg.email}</p>
                 </div>
                 {!msg.isRead && (
-                  <span className="px-2.5 py-0.5 rounded-full bg-primary text-[10px] font-bold uppercase text-white shadow-lg animate-pulse">New</span>
+                  <span className="px-2 py-0.5 rounded-md bg-[#EF233C]/10 text-[#EF233C] border border-[#EF233C]/20 text-[10px] font-bold uppercase tracking-widest ml-2">Priority</span>
                 )}
               </div>
               
-              <div className="bg-background/50 p-5 rounded-xl border border-border/50 text-foreground leading-relaxed text-sm md:text-base relative group">
-                <span className="text-primary/40 text-4xl absolute -top-2 -left-1 opacity-0 group-hover:opacity-100 transition-opacity select-none">"</span>
+              <div className="bg-[#2B2D42] p-6 rounded-2xl border border-[rgba(141,153,174,0.05)] text-[#EDF2F4] leading-relaxed text-sm md:text-base">
                 {msg.content}
               </div>
               
-              <div className="flex items-center gap-4 text-[10px] md:text-xs text-muted-foreground font-bold uppercase tracking-wider">
-                <span className="flex items-center gap-1.5"><Clock className="w-3.5 h-3.5" /> {new Date(msg.createdAt).toLocaleString()}</span>
+              <div className="flex items-center gap-6 text-[10px] text-[#8D99AE] font-bold uppercase tracking-widest">
+                <span className="flex items-center gap-2 px-3 py-1 bg-[#2B2D42] rounded-md border border-[rgba(141,153,174,0.05)]">
+                  <Clock className="w-3.5 h-3.5" /> 
+                  {new Date(msg.createdAt).toLocaleString()}
+                </span>
+                <span className="text-[rgba(141,153,174,0.3)]">ID: {msg._id.slice(-8)}</span>
               </div>
             </div>
             
-            <div className="flex md:flex-col gap-2 justify-end md:justify-start min-w-[140px]">
+            <div className="flex md:flex-col gap-3 justify-end md:justify-start min-w-[160px]">
               {!msg.isRead && (
                 <Button 
                   size="sm" 
                   onClick={() => handleMarkRead(msg._id)}
-                  className="bg-primary hover:bg-primary/90 text-white font-bold gap-2 rounded-lg"
+                  className="bg-[#8D99AE] hover:bg-[#8D99AE]/90 text-[#1F2233] font-bold gap-2 rounded-xl shadow-lg h-10 px-4 active:scale-95 transition-all"
                 >
-                  <CheckCircle className="w-4 h-4" /> Mark Read
+                  <CheckCircle className="w-4 h-4" /> Resolve
                 </Button>
               )}
               <Button 
                 size="sm" 
                 variant="outline" 
                 onClick={() => handleReply(msg.email, msg.name)}
-                className="font-bold gap-2 rounded-lg border-border hover:bg-muted"
+                className="font-bold gap-2 rounded-xl border-[rgba(141,153,174,0.1)] text-[#8D99AE] hover:bg-[#2B2D42] hover:text-[#EDF2F4] h-10 px-4 active:scale-95 transition-all"
               >
                 <Reply className="w-4 h-4" /> Reply
               </Button>
@@ -122,20 +130,20 @@ export default function MessagesManagement() {
                 size="sm" 
                 variant="ghost" 
                 onClick={() => handleDelete(msg._id)}
-                className="text-destructive hover:bg-destructive/10 font-bold gap-2 rounded-lg"
+                className="text-[#EF233C] hover:bg-[#EF233C]/10 font-bold gap-2 rounded-xl h-10 px-4 active:scale-95 transition-all"
               >
-                <Trash2 className="w-4 h-4" /> Delete
+                <Trash2 className="w-4 h-4" /> Terminate
               </Button>
             </div>
           </div>
         ))}
         
         {messages.length === 0 && (
-          <div className="py-24 text-center card-premium bg-muted/20 border-dashed space-y-3">
-             <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto text-muted-foreground">
-                <Mail className="w-8 h-8 opacity-20" />
+          <div className="py-32 text-center card-premium bg-[#2B2D42]/20 border-dashed border-[rgba(141,153,174,0.1)] space-y-4">
+             <div className="w-20 h-20 bg-[#2B2D42] rounded-3xl flex items-center justify-center mx-auto text-[#8D99AE]/20 border border-[rgba(141,153,174,0.05)]">
+                <Mail className="w-10 h-10" />
              </div>
-             <p className="text-muted-foreground font-medium italic">Your inbox is currently empty</p>
+             <p className="text-[#8D99AE] font-bold uppercase tracking-widest text-xs">Communication Queue Empty</p>
           </div>
         )}
       </div>
